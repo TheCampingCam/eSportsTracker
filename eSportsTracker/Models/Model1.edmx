@@ -90,7 +90,7 @@
           <Key>
             <PropertyRef Name="PlayerID" />
           </Key>
-          <Property Name="Handle" Type="varchar" MaxLength="32" />
+          <Property Name="Handle" Type="varchar" MaxLength="32" Nullable="false" />
           <Property Name="DOB" Type="date" />
           <Property Name="LName" Type="varchar" MaxLength="32" />
           <Property Name="FName" Type="varchar" MaxLength="32" />
@@ -124,8 +124,8 @@
           <Key>
             <PropertyRef Name="SponsoredByID" />
           </Key>
-          <Property Name="PlayerID" Type="int" />
-          <Property Name="TeamID" Type="int" />
+          <Property Name="PlayerID" Type="int" Nullable="false" />
+          <Property Name="OrgID" Type="int" Nullable="false" />
           <Property Name="SponsoredByID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
         </EntityType>
         <EntityType Name="Team">
@@ -154,15 +154,23 @@
           <Property Name="TournamentID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="VideoGamePlayed" Type="int" />
         </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Username" />
+          </Key>
+          <Property Name="Username" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="PasswordSalt" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="PasswordHash" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
         <EntityType Name="VideoGame">
           <Key>
             <PropertyRef Name="GameID" />
           </Key>
-          <Property Name="GameName" Type="varchar" MaxLength="32" />
-          <Property Name="Released" Type="date" Nullable="false" />
-          <Property Name="Genre" Type="varchar" MaxLength="16" Nullable="false" />
-          <Property Name="Developer" Type="varchar" MaxLength="32" Nullable="false" />
-          <Property Name="Publisher" Type="varchar" MaxLength="32" Nullable="false" />
+          <Property Name="GameName" Type="varchar" MaxLength="32" Nullable="false" />
+          <Property Name="Released" Type="date" />
+          <Property Name="Genre" Type="varchar" MaxLength="16" />
+          <Property Name="Developer" Type="varchar" MaxLength="32" />
+          <Property Name="Publisher" Type="varchar" MaxLength="32" />
           <Property Name="GameID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
         </EntityType>
         <Association Name="FK_CompetesIn_Team">
@@ -417,8 +425,20 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_SponsoredBy_Org">
+          <End Role="Organization" Type="Self.Organization" Multiplicity="1" />
+          <End Role="SponsoredBy" Type="Self.SponsoredBy" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Organization">
+              <PropertyRef Name="OrgID" />
+            </Principal>
+            <Dependent Role="SponsoredBy">
+              <PropertyRef Name="OrgID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_SponsoredBy_Player">
-          <End Role="Player" Type="Self.Player" Multiplicity="0..1" />
+          <End Role="Player" Type="Self.Player" Multiplicity="1" />
           <End Role="SponsoredBy" Type="Self.SponsoredBy" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Player">
@@ -426,18 +446,6 @@
             </Principal>
             <Dependent Role="SponsoredBy">
               <PropertyRef Name="PlayerID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_SponsoredBy_Team">
-          <End Role="Team" Type="Self.Team" Multiplicity="0..1" />
-          <End Role="SponsoredBy" Type="Self.SponsoredBy" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Team">
-              <PropertyRef Name="TeamID" />
-            </Principal>
-            <Dependent Role="SponsoredBy">
-              <PropertyRef Name="TeamID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -496,6 +504,7 @@
           <EntitySet Name="Team" EntityType="Self.Team" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TeamMatch" EntityType="Self.TeamMatch" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Tournament" EntityType="Self.Tournament" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="VideoGame" EntityType="Self.VideoGame" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_CompetesIn_Team" Association="Self.FK_CompetesIn_Team">
             <End Role="Team" EntitySet="Team" />
@@ -581,12 +590,12 @@
             <End Role="Player" EntitySet="Player" />
             <End Role="SoloMatch" EntitySet="SoloMatch" />
           </AssociationSet>
-          <AssociationSet Name="FK_SponsoredBy_Player" Association="Self.FK_SponsoredBy_Player">
-            <End Role="Player" EntitySet="Player" />
+          <AssociationSet Name="FK_SponsoredBy_Org" Association="Self.FK_SponsoredBy_Org">
+            <End Role="Organization" EntitySet="Organization" />
             <End Role="SponsoredBy" EntitySet="SponsoredBy" />
           </AssociationSet>
-          <AssociationSet Name="FK_SponsoredBy_Team" Association="Self.FK_SponsoredBy_Team">
-            <End Role="Team" EntitySet="Team" />
+          <AssociationSet Name="FK_SponsoredBy_Player" Association="Self.FK_SponsoredBy_Player">
+            <End Role="Player" EntitySet="Player" />
             <End Role="SponsoredBy" EntitySet="SponsoredBy" />
           </AssociationSet>
           <AssociationSet Name="FK_TEAMMATCH_ISA" Association="Self.FK_TEAMMATCH_ISA">
@@ -651,13 +660,14 @@
           </Key>
           <Property Name="OrgName" Type="String" MaxLength="32" FixedLength="false" Unicode="false" />
           <Property Name="OrgID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="SponsoredBies" Relationship="Self.FK_SponsoredBy_Org" FromRole="Organization" ToRole="SponsoredBy" />
           <NavigationProperty Name="Teams" Relationship="Self.Owns" FromRole="Organization" ToRole="Team" />
         </EntityType>
         <EntityType Name="Player">
           <Key>
             <PropertyRef Name="PlayerID" />
           </Key>
-          <Property Name="Handle" Type="String" MaxLength="32" FixedLength="false" Unicode="false" />
+          <Property Name="Handle" Type="String" MaxLength="32" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="DOB" Type="DateTime" Precision="0" />
           <Property Name="LName" Type="String" MaxLength="32" FixedLength="false" Unicode="false" />
           <Property Name="FName" Type="String" MaxLength="32" FixedLength="false" Unicode="false" />
@@ -693,11 +703,11 @@
           <Key>
             <PropertyRef Name="SponsoredByID" />
           </Key>
-          <Property Name="PlayerID" Type="Int32" />
-          <Property Name="TeamID" Type="Int32" />
+          <Property Name="PlayerID" Type="Int32" Nullable="false" />
+          <Property Name="OrgID" Type="Int32" Nullable="false" />
           <Property Name="SponsoredByID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="Organization" Relationship="Self.FK_SponsoredBy_Org" FromRole="SponsoredBy" ToRole="Organization" />
           <NavigationProperty Name="Player" Relationship="Self.FK_SponsoredBy_Player" FromRole="SponsoredBy" ToRole="Player" />
-          <NavigationProperty Name="Team" Relationship="Self.FK_SponsoredBy_Team" FromRole="SponsoredBy" ToRole="Team" />
         </EntityType>
         <EntityType Name="Team">
           <Key>
@@ -706,7 +716,6 @@
           <Property Name="TeamName" Type="String" MaxLength="32" FixedLength="false" Unicode="false" />
           <Property Name="NumPlayers" Type="Int32" Nullable="false" />
           <Property Name="TeamID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <NavigationProperty Name="SponsoredBies" Relationship="Self.FK_SponsoredBy_Team" FromRole="Team" ToRole="SponsoredBy" />
           <NavigationProperty Name="TeamMatches" Relationship="Self.FK_TEAMMATCH_WINNER" FromRole="Team" ToRole="TeamMatch" />
           <NavigationProperty Name="Tournaments" Relationship="Self.CompetesIn" FromRole="Team" ToRole="Tournament" />
           <NavigationProperty Name="Organizations" Relationship="Self.Owns" FromRole="Team" ToRole="Organization" />
@@ -737,15 +746,23 @@
           <NavigationProperty Name="Players" Relationship="Self.Enters" FromRole="Tournament" ToRole="Player" />
           <NavigationProperty Name="Matches" Relationship="Self.PartOf" FromRole="Tournament" ToRole="Match" />
         </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Username" />
+          </Key>
+          <Property Name="Username" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PasswordSalt" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="PasswordHash" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
         <EntityType Name="VideoGame">
           <Key>
             <PropertyRef Name="GameID" />
           </Key>
-          <Property Name="GameName" Type="String" MaxLength="32" FixedLength="false" Unicode="false" />
-          <Property Name="Released" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="Genre" Type="String" MaxLength="16" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Developer" Type="String" MaxLength="32" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Publisher" Type="String" MaxLength="32" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="GameName" Type="String" MaxLength="32" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Released" Type="DateTime" Precision="0" />
+          <Property Name="Genre" Type="String" MaxLength="16" FixedLength="false" Unicode="false" />
+          <Property Name="Developer" Type="String" MaxLength="32" FixedLength="false" Unicode="false" />
+          <Property Name="Publisher" Type="String" MaxLength="32" FixedLength="false" Unicode="false" />
           <Property Name="GameID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <NavigationProperty Name="Tournaments" Relationship="Self.FK_TOURNAMENT_GAMEPLAYED" FromRole="VideoGame" ToRole="Tournament" />
           <NavigationProperty Name="Matches" Relationship="Self.MatchOf" FromRole="VideoGame" ToRole="Match" />
@@ -822,6 +839,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_SponsoredBy_Org">
+          <End Role="Organization" Type="Self.Organization" Multiplicity="1" />
+          <End Role="SponsoredBy" Type="Self.SponsoredBy" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Organization">
+              <PropertyRef Name="OrgID" />
+            </Principal>
+            <Dependent Role="SponsoredBy">
+              <PropertyRef Name="OrgID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_PlaysIn_PlayerID">
           <End Role="Player" Type="Self.Player" Multiplicity="1" />
           <End Role="PlaysIn" Type="Self.PlaysIn" Multiplicity="*" />
@@ -847,7 +876,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_SponsoredBy_Player">
-          <End Role="Player" Type="Self.Player" Multiplicity="0..1" />
+          <End Role="Player" Type="Self.Player" Multiplicity="1" />
           <End Role="SponsoredBy" Type="Self.SponsoredBy" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Player">
@@ -855,18 +884,6 @@
             </Principal>
             <Dependent Role="SponsoredBy">
               <PropertyRef Name="PlayerID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_SponsoredBy_Team">
-          <End Role="Team" Type="Self.Team" Multiplicity="0..1" />
-          <End Role="SponsoredBy" Type="Self.SponsoredBy" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Team">
-              <PropertyRef Name="TeamID" />
-            </Principal>
-            <Dependent Role="SponsoredBy">
-              <PropertyRef Name="TeamID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -922,7 +939,7 @@
           <End Role="Player" Type="Self.Player" Multiplicity="*" />
           <End Role="Team" Type="Self.Team" Multiplicity="*" />
         </Association>
-        <EntityContainer Name="EsportsTrackerEntities" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="EsportsTrackerEntities1" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="AttributesTables" EntityType="Self.AttributesTable" />
           <EntitySet Name="Matches" EntityType="Self.Match" />
           <EntitySet Name="MatchAttributes" EntityType="Self.MatchAttribute" />
@@ -934,6 +951,7 @@
           <EntitySet Name="Teams" EntityType="Self.Team" />
           <EntitySet Name="TeamMatches" EntityType="Self.TeamMatch" />
           <EntitySet Name="Tournaments" EntityType="Self.Tournament" />
+          <EntitySet Name="Users" EntityType="Self.User" />
           <EntitySet Name="VideoGames" EntityType="Self.VideoGame" />
           <AssociationSet Name="FK_MatchAttribute_AttributeTable" Association="Self.FK_MatchAttribute_AttributeTable">
             <End Role="AttributesTable" EntitySet="AttributesTables" />
@@ -959,6 +977,10 @@
             <End Role="Player" EntitySet="Players" />
             <End Role="MatchAttribute" EntitySet="MatchAttributes" />
           </AssociationSet>
+          <AssociationSet Name="FK_SponsoredBy_Org" Association="Self.FK_SponsoredBy_Org">
+            <End Role="Organization" EntitySet="Organizations" />
+            <End Role="SponsoredBy" EntitySet="SponsoredBies" />
+          </AssociationSet>
           <AssociationSet Name="FK_PlaysIn_PlayerID" Association="Self.FK_PlaysIn_PlayerID">
             <End Role="Player" EntitySet="Players" />
             <End Role="PlaysIn" EntitySet="PlaysIns" />
@@ -969,10 +991,6 @@
           </AssociationSet>
           <AssociationSet Name="FK_SponsoredBy_Player" Association="Self.FK_SponsoredBy_Player">
             <End Role="Player" EntitySet="Players" />
-            <End Role="SponsoredBy" EntitySet="SponsoredBies" />
-          </AssociationSet>
-          <AssociationSet Name="FK_SponsoredBy_Team" Association="Self.FK_SponsoredBy_Team">
-            <End Role="Team" EntitySet="Teams" />
             <End Role="SponsoredBy" EntitySet="SponsoredBies" />
           </AssociationSet>
           <AssociationSet Name="FK_TEAMMATCH_WINNER" Association="Self.FK_TEAMMATCH_WINNER">
@@ -1017,7 +1035,7 @@
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="EsportsTrackerModelStoreContainer" CdmEntityContainer="EsportsTrackerEntities">
+        <EntityContainerMapping StorageEntityContainer="EsportsTrackerModelStoreContainer" CdmEntityContainer="EsportsTrackerEntities1">
           <EntitySetMapping Name="AttributesTables">
             <EntityTypeMapping TypeName="EsportsTrackerModel.AttributesTable">
               <MappingFragment StoreEntitySet="AttributesTable">
@@ -1085,7 +1103,7 @@
             <EntityTypeMapping TypeName="EsportsTrackerModel.SponsoredBy">
               <MappingFragment StoreEntitySet="SponsoredBy">
                 <ScalarProperty Name="PlayerID" ColumnName="PlayerID" />
-                <ScalarProperty Name="TeamID" ColumnName="TeamID" />
+                <ScalarProperty Name="OrgID" ColumnName="OrgID" />
                 <ScalarProperty Name="SponsoredByID" ColumnName="SponsoredByID" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -1116,6 +1134,15 @@
                 <ScalarProperty Name="TournamentLocation" ColumnName="TournamentLocation" />
                 <ScalarProperty Name="TournamentID" ColumnName="TournamentID" />
                 <ScalarProperty Name="VideoGamePlayed" ColumnName="VideoGamePlayed" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="EsportsTrackerModel.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="PasswordSalt" ColumnName="PasswordSalt" />
+                <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

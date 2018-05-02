@@ -12,7 +12,7 @@ namespace eSportsTracker.Controllers
 {
     public class PlayersController : Controller
     {
-        private EsportsTrackerEntities db = new EsportsTrackerEntities();
+        private EsportsTrackerEntities1 db = new EsportsTrackerEntities1();
 
         // GET: Players
         public ActionResult Index()

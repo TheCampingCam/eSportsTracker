@@ -10,107 +10,107 @@ using eSportsTracker.Models;
 
 namespace eSportsTracker.Controllers
 {
-    public class VideoGamesController : Controller
+    public class UsersController : Controller
     {
         private EsportsTrackerEntities1 db = new EsportsTrackerEntities1();
 
-        // GET: VideoGames
+        // GET: Users
         public ActionResult Index()
         {
-            return View(db.VideoGames.ToList());
+            return View(db.Users.ToList());
         }
 
-        // GET: VideoGames/Details/5
-        public ActionResult Details(int? id)
+        // GET: Users/Details/5
+        public ActionResult Details(string id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            VideoGame videoGame = db.VideoGames.Find(id);
-            if (videoGame == null)
+            User user = db.Users.Find(id);
+            if (user == null)
             {
                 return HttpNotFound();
             }
-            return View(videoGame);
+            return View(user);
         }
 
-        // GET: VideoGames/Create
+        // GET: Users/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: VideoGames/Create
+        // POST: Users/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "GameName,Released,Genre,Developer,Publisher,GameID")] VideoGame videoGame)
+        public ActionResult Create([Bind(Include = "Username,PasswordSalt,PasswordHash")] User user)
         {
             if (ModelState.IsValid)
             {
-                db.VideoGames.Add(videoGame);
+                db.Users.Add(user);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(videoGame);
+            return View(user);
         }
 
-        // GET: VideoGames/Edit/5
-        public ActionResult Edit(int? id)
+        // GET: Users/Edit/5
+        public ActionResult Edit(string id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            VideoGame videoGame = db.VideoGames.Find(id);
-            if (videoGame == null)
+            User user = db.Users.Find(id);
+            if (user == null)
             {
                 return HttpNotFound();
             }
-            return View(videoGame);
+            return View(user);
         }
 
-        // POST: VideoGames/Edit/5
+        // POST: Users/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "GameName,Released,Genre,Developer,Publisher,GameID")] VideoGame videoGame)
+        public ActionResult Edit([Bind(Include = "Username,PasswordSalt,PasswordHash")] User user)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(videoGame).State = EntityState.Modified;
+                db.Entry(user).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(videoGame);
+            return View(user);
         }
 
-        // GET: VideoGames/Delete/5
-        public ActionResult Delete(int? id)
+        // GET: Users/Delete/5
+        public ActionResult Delete(string id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            VideoGame videoGame = db.VideoGames.Find(id);
-            if (videoGame == null)
+            User user = db.Users.Find(id);
+            if (user == null)
             {
                 return HttpNotFound();
             }
-            return View(videoGame);
+            return View(user);
         }
 
-        // POST: VideoGames/Delete/5
+        // POST: Users/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult DeleteConfirmed(string id)
         {
-            VideoGame videoGame = db.VideoGames.Find(id);
-            db.VideoGames.Remove(videoGame);
+            User user = db.Users.Find(id);
+            db.Users.Remove(user);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

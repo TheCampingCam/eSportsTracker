@@ -22,7 +22,7 @@ namespace eSportsTracker.Models
         }
     
         public string GameName { get; set; }
-        public System.DateTime Released { get; set; }
+        public Nullable<System.DateTime> Released { get; set; }
         public string Genre { get; set; }
         public string Developer { get; set; }
         public string Publisher { get; set; }

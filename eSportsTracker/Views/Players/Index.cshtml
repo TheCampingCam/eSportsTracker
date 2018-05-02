@@ -12,16 +12,16 @@
 <table class="table">
     <tr>
         <th>
-            Handle
+            @Html.DisplayNameFor(model => model.Handle)
         </th>
         <th>
-            DOB
+            @Html.DisplayNameFor(model => model.DOB)
         </th>
         <th>
-            First Name
+            @Html.DisplayNameFor(model => model.LName)
         </th>
         <th>
-            Last Name
+            @Html.DisplayNameFor(model => model.FName)
         </th>
         <th></th>
     </tr>
@@ -35,10 +35,10 @@
             @Html.DisplayFor(modelItem => item.DOB)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.FName)
+            @Html.DisplayFor(modelItem => item.LName)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.LName)
+            @Html.DisplayFor(modelItem => item.FName)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.PlayerID }) |
