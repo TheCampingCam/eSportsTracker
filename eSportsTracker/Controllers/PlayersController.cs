@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -55,7 +56,15 @@ namespace eSportsTracker.Controllers
             if (ModelState.IsValid)
             {
                 db.Players.Add(player);
-                db.SaveChanges();
+                try
+                {
+                    db.SaveChanges();
+                }
+                catch (DbUpdateException e)
+                {
+                    @ViewBag.Error = "Could not player";
+                    return View();
+                }
                 return RedirectToAction("Index");
             }
 
@@ -92,7 +101,15 @@ namespace eSportsTracker.Controllers
             if (ModelState.IsValid)
             {
                 db.Entry(player).State = EntityState.Modified;
-                db.SaveChanges();
+                try
+                {
+                    db.SaveChanges();
+                }
+                catch (DbUpdateException e)
+                {
+                    @ViewBag.Error = "Could not process player change";
+                    return View();
+                }
                 return RedirectToAction("Index");
             }
             return View(player);
@@ -125,7 +142,15 @@ namespace eSportsTracker.Controllers
         {
             Player player = db.Players.Find(id);
             db.Players.Remove(player);
-            db.SaveChanges();
+            try
+            {
+                db.SaveChanges();
+            }
+            catch (DbUpdateException e)
+            {
+                @ViewBag.Error = "Could not remove player records";
+                return View();
+            }
             return RedirectToAction("Index");
         }
 

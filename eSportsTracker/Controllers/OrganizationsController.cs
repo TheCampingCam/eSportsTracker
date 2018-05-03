@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -56,7 +57,15 @@ namespace eSportsTracker.Controllers
             if (ModelState.IsValid)
             {
                 db.Organizations.Add(organization);
-                db.SaveChanges();
+                try
+                {
+                    db.SaveChanges();
+                }
+                catch (DbUpdateException e)
+                {
+                    @ViewBag.Error = "Could not process organization";
+                    return View();
+                }
                 return RedirectToAction("Index");
             }
 
@@ -93,7 +102,15 @@ namespace eSportsTracker.Controllers
             if (ModelState.IsValid)
             {
                 db.Entry(organization).State = EntityState.Modified;
-                db.SaveChanges();
+                try
+                {
+                    db.SaveChanges();
+                }
+                catch (DbUpdateException e)
+                {
+                    @ViewBag.Error = "Could not process organization change";
+                    return View();
+                }
                 return RedirectToAction("Index");
             }
             return View(organization);
@@ -126,7 +143,15 @@ namespace eSportsTracker.Controllers
         {
             Organization organization = db.Organizations.Find(id);
             db.Organizations.Remove(organization);
-            db.SaveChanges();
+            try
+            {
+                db.SaveChanges();
+            }
+            catch (DbUpdateException e)
+            {
+                @ViewBag.Error = "Could not remove organization";
+                return View();
+            }
             return RedirectToAction("Index");
         }
 

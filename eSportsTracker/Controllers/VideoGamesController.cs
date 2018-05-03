@@ -62,6 +62,8 @@ namespace eSportsTracker.Controllers
                     db.SaveChanges();
                 }
                 catch (DbUpdateException e) {
+                    @ViewBag.Error = "Could not process game";
+                    return View();
                 }
                 return RedirectToAction("Index");
             }
@@ -99,7 +101,15 @@ namespace eSportsTracker.Controllers
             if (ModelState.IsValid)
             {
                 db.Entry(videoGame).State = EntityState.Modified;
-                db.SaveChanges();
+                try
+                {
+                    db.SaveChanges();
+                }
+                catch (DbUpdateException e)
+                {
+                    @ViewBag.Error = "Could not process game changes";
+                    return View();
+                }
                 return RedirectToAction("Index");
             }
             return View(videoGame);
@@ -132,7 +142,15 @@ namespace eSportsTracker.Controllers
         {
             VideoGame videoGame = db.VideoGames.Find(id);
             db.VideoGames.Remove(videoGame);
-            db.SaveChanges();
+            try
+            {
+                db.SaveChanges();
+            }
+            catch (DbUpdateException e)
+            {
+                @ViewBag.Error = "Could not remove game record";
+                return View();
+            }
             return RedirectToAction("Index");
         }
 
