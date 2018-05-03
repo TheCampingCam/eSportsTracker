@@ -38,6 +38,11 @@ namespace eSportsTracker.Controllers
         // GET: Organizations/Create
         public ActionResult Create()
         {
+            if (Session["LoggedIn"] == null)
+            {
+                return RedirectToAction("Index", "Home", new { area = "" });
+            }
+
             return View();
         }
 
@@ -61,6 +66,11 @@ namespace eSportsTracker.Controllers
         // GET: Organizations/Edit/5
         public ActionResult Edit(int? id)
         {
+            if (Session["LoggedIn"] == null)
+            {
+                return RedirectToAction("Index", "Home", new { area = "" });
+            }
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -92,6 +102,11 @@ namespace eSportsTracker.Controllers
         // GET: Organizations/Delete/5
         public ActionResult Delete(int? id)
         {
+            if (Session["LoggedIn"] == null)
+            {
+                return RedirectToAction("Index", "Home", new { area = "" });
+            }
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);

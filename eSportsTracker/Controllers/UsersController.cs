@@ -19,6 +19,11 @@ namespace eSportsTracker.Controllers
         // GET: Users/Create
         public ActionResult Create()
         {
+            if (Session["LoggedIn"] == null)
+            {
+                return RedirectToAction("Index", "Home", new { area = "" });
+            }
+
             return View();
         }
 
@@ -31,7 +36,7 @@ namespace eSportsTracker.Controllers
         {
             if (Session["LoggedIn"] == null)
             {
-                return RedirectToAction("Home/Index");
+                return RedirectToAction("Index", "Home", new { area = "" });
             }
 
             Models.User user = new Models.User();
@@ -52,7 +57,7 @@ namespace eSportsTracker.Controllers
 
                 Session["LoggedIn"] = "yes";
 
-                return RedirectToAction("Home/Index");
+                return RedirectToAction("Index", "Home", new { area = "" });
             }
 
             return View(user);
