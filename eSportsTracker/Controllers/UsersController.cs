@@ -91,7 +91,8 @@ namespace eSportsTracker.Controllers
                 return View();
             }
 
-            return RedirectToAction("Index", "Home", new { area = "" });
+            ViewBag.Error = "Could Not Log In";
+            return View();
         }
 
         public ActionResult LogOut()
