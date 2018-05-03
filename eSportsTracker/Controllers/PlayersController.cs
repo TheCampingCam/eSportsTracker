@@ -12,11 +12,11 @@ namespace eSportsTracker.Controllers
 {
     public class PlayersController : Controller
     {
-        private EsportsTrackerEntities db = new EsportsTrackerEntities();
+        private EsportsTrackerEntities1 db = new EsportsTrackerEntities1();
 
         // GET: Players
         public ActionResult Index()
-        {
+        { 
             return View(db.Players.ToList());
         }
 
@@ -38,6 +38,10 @@ namespace eSportsTracker.Controllers
         // GET: Players/Create
         public ActionResult Create()
         {
+            if (Session["LoggedIn"] == null)
+            {
+                return RedirectToAction("Index");
+            }
             return View();
         }
 
@@ -61,6 +65,11 @@ namespace eSportsTracker.Controllers
         // GET: Players/Edit/5
         public ActionResult Edit(int? id)
         {
+            if (Session["LoggedIn"] == null)
+            {
+                return RedirectToAction("Index");
+            }
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -92,6 +101,11 @@ namespace eSportsTracker.Controllers
         // GET: Players/Delete/5
         public ActionResult Delete(int? id)
         {
+            if (Session["LoggedIn"] == null)
+            {
+                return RedirectToAction("Index");
+            }
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);

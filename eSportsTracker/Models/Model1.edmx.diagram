@@ -4,29 +4,30 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="2f3ea60ac775482a94c99d7a206f9959" Name="Diagram1">
-        <EntityTypeShape EntityType="EsportsTrackerModel.AttributesTable" Width="1.5" PointX="0.75" PointY="13.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="EsportsTrackerModel.Match" Width="1.5" PointX="0.75" PointY="9" IsExpanded="true" />
-        <EntityTypeShape EntityType="EsportsTrackerModel.MatchAttribute" Width="1.5" PointX="3" PointY="9.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="EsportsTrackerModel.Organization" Width="1.5" PointX="3.75" PointY="3.625" IsExpanded="true" />
+      <Diagram DiagramId="bbe0acc635eb4f1db2f85397ff64f4a2" Name="Diagram1">
+        <EntityTypeShape EntityType="EsportsTrackerModel.AttributesTable" Width="1.5" PointX="0.75" PointY="13.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="EsportsTrackerModel.Match" Width="1.5" PointX="0.75" PointY="8.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="EsportsTrackerModel.MatchAttribute" Width="1.5" PointX="3" PointY="9.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="EsportsTrackerModel.Organization" Width="1.5" PointX="3.75" PointY="3.375" IsExpanded="true" />
         <EntityTypeShape EntityType="EsportsTrackerModel.Player" Width="1.5" PointX="0.75" PointY="4.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="EsportsTrackerModel.PlaysIn" Width="1.5" PointX="3" PointY="6.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="EsportsTrackerModel.SoloMatch" Width="1.5" PointX="3" PointY="12.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="EsportsTrackerModel.SponsoredBy" Width="1.5" PointX="8.25" PointY="6.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="EsportsTrackerModel.PlaysIn" Width="1.5" PointX="3" PointY="6.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="EsportsTrackerModel.SoloMatch" Width="1.5" PointX="3" PointY="12.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="EsportsTrackerModel.SponsoredBy" Width="1.5" PointX="6" PointY="4.625" IsExpanded="true" />
         <EntityTypeShape EntityType="EsportsTrackerModel.Team" Width="1.5" PointX="6" PointY="9" IsExpanded="true" />
-        <EntityTypeShape EntityType="EsportsTrackerModel.TeamMatch" Width="1.5" PointX="8.25" PointY="9.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="EsportsTrackerModel.Tournament" Width="1.5" PointX="8.25" PointY="16.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="EsportsTrackerModel.VideoGame" Width="1.5" PointX="3" PointY="23.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="EsportsTrackerModel.TeamMatch" Width="1.5" PointX="8.25" PointY="9.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="EsportsTrackerModel.Tournament" Width="1.5" PointX="8.25" PointY="15.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="EsportsTrackerModel.User" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="EsportsTrackerModel.VideoGame" Width="1.5" PointX="3" PointY="23.25" IsExpanded="true" />
         <AssociationConnector Association="EsportsTrackerModel.FK_MatchAttribute_AttributeTable" ManuallyRouted="false" />
         <AssociationConnector Association="EsportsTrackerModel.FK_MatchAttribute_Match" ManuallyRouted="false" />
         <AssociationConnector Association="EsportsTrackerModel.FK_PlaysIn_MatchID" ManuallyRouted="false" />
         <AssociationConnector Association="EsportsTrackerModel.FK_SOLOMATCH_ISA" ManuallyRouted="false" />
         <AssociationConnector Association="EsportsTrackerModel.FK_TEAMMATCH_ISA" ManuallyRouted="false" />
         <AssociationConnector Association="EsportsTrackerModel.FK_MatchAttribute_Player" ManuallyRouted="false" />
+        <AssociationConnector Association="EsportsTrackerModel.FK_SponsoredBy_Org" ManuallyRouted="false" />
         <AssociationConnector Association="EsportsTrackerModel.FK_PlaysIn_PlayerID" ManuallyRouted="false" />
         <AssociationConnector Association="EsportsTrackerModel.FK_SOLOMATCH_WINNER" ManuallyRouted="false" />
         <AssociationConnector Association="EsportsTrackerModel.FK_SponsoredBy_Player" ManuallyRouted="false" />
-        <AssociationConnector Association="EsportsTrackerModel.FK_SponsoredBy_Team" ManuallyRouted="false" />
         <AssociationConnector Association="EsportsTrackerModel.FK_TEAMMATCH_WINNER" ManuallyRouted="false" />
         <AssociationConnector Association="EsportsTrackerModel.FK_TOURNAMENT_GAMEPLAYED" ManuallyRouted="false" />
         <AssociationConnector Association="EsportsTrackerModel.CompetesIn" ManuallyRouted="false" />

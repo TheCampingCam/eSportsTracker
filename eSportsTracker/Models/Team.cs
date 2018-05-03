@@ -17,7 +17,6 @@ namespace eSportsTracker.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Team()
         {
-            this.SponsoredBies = new HashSet<SponsoredBy>();
             this.TeamMatches = new HashSet<TeamMatch>();
             this.Tournaments = new HashSet<Tournament>();
             this.Organizations = new HashSet<Organization>();
@@ -29,8 +28,6 @@ namespace eSportsTracker.Models
         public int NumPlayers { get; set; }
         public int TeamID { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SponsoredBy> SponsoredBies { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<TeamMatch> TeamMatches { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

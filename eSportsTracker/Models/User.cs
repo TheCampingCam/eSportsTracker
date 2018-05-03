@@ -12,13 +12,10 @@ namespace eSportsTracker.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class SponsoredBy
+    public partial class User
     {
-        public int PlayerID { get; set; }
-        public int OrgID { get; set; }
-        public int SponsoredByID { get; set; }
-    
-        public virtual Organization Organization { get; set; }
-        public virtual Player Player { get; set; }
+        public string Username { get; set; }
+        public string PasswordSalt { get; set; }
+        public string PasswordHash { get; set; }
     }
 }

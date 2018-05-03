@@ -7,15 +7,17 @@
 <h2>Index</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @if (Session["LoggedIn"] != null)
+    {
+    @Html.ActionLink("Create New", "Create") }
 </p>
 <table class="table">
     <tr>
         <th>
-            Name
+            @Html.DisplayNameFor(model => model.GameName)
         </th>
         <th>
-            Date Released
+            @Html.DisplayNameFor(model => model.Released)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Genre)
@@ -47,9 +49,13 @@
             @Html.DisplayFor(modelItem => item.Publisher)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.GameID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.GameID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.GameID })
+            @{ if (Session["LoggedIn"] != null)
+               {
+                    @Html.ActionLink("Edit", "Edit", new { id = item.GameID }) <text>|</text>
+                    @Html.ActionLink("Details", "Details", new { id = item.GameID }) <text>|</text>
+                    @Html.ActionLink("Delete", "Delete", new { id = item.GameID })
+               }
+            }
         </td>
     </tr>
 }

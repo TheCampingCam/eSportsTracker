@@ -13,10 +13,10 @@ namespace eSportsTracker.Models
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class EsportsTrackerEntities : DbContext
+    public partial class EsportsTrackerEntities1 : DbContext
     {
-        public EsportsTrackerEntities()
-            : base("name=EsportsTrackerEntities")
+        public EsportsTrackerEntities1()
+            : base("name=EsportsTrackerEntities1")
         {
         }
     
@@ -36,6 +36,7 @@ namespace eSportsTracker.Models
         public virtual DbSet<Team> Teams { get; set; }
         public virtual DbSet<TeamMatch> TeamMatches { get; set; }
         public virtual DbSet<Tournament> Tournaments { get; set; }
+        public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<VideoGame> VideoGames { get; set; }
     }
 }
