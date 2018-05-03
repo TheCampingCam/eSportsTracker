@@ -16,19 +16,6 @@ namespace eSportsTracker.Controllers
     {
         private EsportsTrackerEntities1 db = new EsportsTrackerEntities1();
 
-        public async Task OnGetAsync(string searchString)
-        {
-            var players = from m in db.Players
-                          select m;
-
-            if (!String.IsNullOrEmpty(searchString))
-            {
-                players = players.Where(s => s.Handle.Contains(searchString));
-            }
-
-            List<Player> player = await players.ToListAsync();
-        }
-
         // GET: Players
         public ActionResult Index(string searchString)
         {

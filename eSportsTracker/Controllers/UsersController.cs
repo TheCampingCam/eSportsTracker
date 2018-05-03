@@ -91,7 +91,7 @@ namespace eSportsTracker.Controllers
                 return View();
             }
 
-            return RedirectToAction("Home/Index");
+            return RedirectToAction("Index", "Home", new { area = "" });
         }
 
         public ActionResult LogOut()
