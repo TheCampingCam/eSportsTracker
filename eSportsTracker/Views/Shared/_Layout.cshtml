@@ -43,8 +43,16 @@
         @RenderBody()
         <hr />
         <footer>
-            @Html.ActionLink("Administrator Log In", "LogIn", "Users")
-            <div style="float:right">@Html.ActionLink("Log Out", "LogOut", "Users")</div>
+            @{  if (val.Equals("")) 
+                {
+                @Html.ActionLink("Administrator Log In", "LogIn", "Users")
+                }
+                else
+                {
+                @Html.ActionLink("Create Admin", "Create", "Users")
+                <div style="float:right">@Html.ActionLink("Log Out", "LogOut", "Users")</div>
+                }
+            }
         </footer>
     </div>
 

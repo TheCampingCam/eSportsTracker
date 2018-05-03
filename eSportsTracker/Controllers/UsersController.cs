@@ -29,6 +29,11 @@ namespace eSportsTracker.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(String username, String password)
         {
+            if (Session["LoggedIn"] == null)
+            {
+                return RedirectToAction("Home/Index");
+            }
+
             Models.User user = new Models.User();
             user.Username = username;
 
@@ -47,7 +52,7 @@ namespace eSportsTracker.Controllers
 
                 Session["LoggedIn"] = "yes";
 
-                return RedirectToAction("Index");
+                return RedirectToAction("Home/Index");
             }
 
             return View(user);
@@ -64,7 +69,8 @@ namespace eSportsTracker.Controllers
             Models.User user = db.Users.Find(username);
 
             byte[] salt = Convert.FromBase64String(user.PasswordSalt);
-            if (user.PasswordHash.Equals(Convert.ToBase64String(GenerateSaltedHash(password, salt)))) {
+            if (user.PasswordHash.Equals(Convert.ToBase64String(GenerateSaltedHash(password, salt))))
+            {
                 Response.Cookies["Username"].Value = username;
                 Response.Cookies["Username"].Expires = DateTime.Now.AddMinutes(60);
 

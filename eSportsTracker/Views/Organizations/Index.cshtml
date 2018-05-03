@@ -7,7 +7,9 @@
 <h2>Index</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @if (Session["LoggedIn"] != null)
+    {
+    @Html.ActionLink("Create New", "Create")}
 </p>
 <table class="table">
     <tr>
@@ -23,11 +25,15 @@
             @Html.DisplayFor(modelItem => item.OrgName)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.OrgID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.OrgID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.OrgID })
+            @{ if (Session["LoggedIn"] != null)
+               { 
+                    @Html.ActionLink("Edit", "Edit", new { id = item.OrgID }) <text>|</text>
+                    @Html.ActionLink("Details", "Details", new { id = item.OrgID }) <text>|</text>
+                    @Html.ActionLink("Delete", "Delete", new { id = item.OrgID })
+               }
+            }
         </td>
     </tr>
-}
+                }
 
 </table>
