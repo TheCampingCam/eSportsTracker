@@ -7,7 +7,9 @@
 <h2>Index</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @if (Session["LoggedIn"] != null)
+    {
+        @Html.ActionLink("Create New", "Create")}
 </p>
 <table class="table">
     <tr>
@@ -35,9 +37,15 @@
             @Html.DisplayFor(modelItem => item.TeamMatch.MatchID)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.MatchID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.MatchID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.MatchID })
+            @{
+             if (Session["LoggedIn"] != null)
+            {
+                 @Html.ActionLink("Edit", "Edit", new { id = item.MatchID }) <text>|</text>
+                 @Html.ActionLink("Details", "Details", new { id = item.MatchID }) <text>|</text>
+                 @Html.ActionLink("Delete", "Delete", new { id = item.MatchID })
+}
+
+            }
         </td>
     </tr>
 }

@@ -11,72 +11,67 @@ using eSportsTracker.Models;
 
 namespace eSportsTracker.Controllers
 {
-    public class MatchesController : Controller
+    public class TeamsController : Controller
     {
         private EsportsTrackerEntities1 db = new EsportsTrackerEntities1();
 
-        // GET: Matches
+        // GET: Teams
         public ActionResult Index()
         {
-            var matches = db.Matches.Include(m => m.SoloMatch).Include(m => m.TeamMatch);
-            return View(matches.ToList());
+            return View(db.Teams.ToList());
         }
 
-        // GET: Matches/Details/5
+        // GET: Teams/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Match match = db.Matches.Find(id);
-            if (match == null)
+            Team team = db.Teams.Find(id);
+            if (team == null)
             {
                 return HttpNotFound();
             }
-            return View(match);
+            return View(team);
         }
 
-        // GET: Matches/Create
+        // GET: Teams/Create
         public ActionResult Create()
         {
             if (Session["LoggedIn"] == null)
             {
                 return RedirectToAction("Index");
             }
-            ViewBag.MatchID = new SelectList(db.SoloMatches, "MatchID", "MatchID");
-            ViewBag.MatchID = new SelectList(db.TeamMatches, "MatchID", "MatchID");
             return View();
         }
 
-        // POST: Matches/Create
+        // POST: Teams/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "MatchID,TimePlayed")] Match match)
+        public ActionResult Create([Bind(Include = "TeamName,NumPlayers,TeamID")] Team team)
         {
             if (ModelState.IsValid)
             {
-                db.Matches.Add(match);
+                db.Teams.Add(team);
                 try
                 {
                     db.SaveChanges();
                 }
                 catch (DbUpdateException e)
                 {
-                    @ViewBag.Error = "Could not process match";
+                    @ViewBag.Error = "Could not process team";
                     return View();
                 }
                 return RedirectToAction("Index");
             }
 
-            ViewBag.MatchID = new SelectList(db.SoloMatches, "MatchID", "MatchID", match.MatchID);
-            ViewBag.MatchID = new SelectList(db.TeamMatches, "MatchID", "MatchID", match.MatchID);
-            return View(match);
+            return View(team);
         }
 
-        // GET: Matches/Edit/5
+        // GET: Teams/Edit/5
         public ActionResult Edit(int? id)
         {
             if (Session["LoggedIn"] == null)
@@ -87,43 +82,39 @@ namespace eSportsTracker.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Match match = db.Matches.Find(id);
-            if (match == null)
+            Team team = db.Teams.Find(id);
+            if (team == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.MatchID = new SelectList(db.SoloMatches, "MatchID", "MatchID", match.MatchID);
-            ViewBag.MatchID = new SelectList(db.TeamMatches, "MatchID", "MatchID", match.MatchID);
-            return View(match);
+            return View(team);
         }
 
-        // POST: Matches/Edit/5
+        // POST: Teams/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "MatchID,TimePlayed")] Match match)
+        public ActionResult Edit([Bind(Include = "TeamName,NumPlayers,TeamID")] Team team)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(match).State = EntityState.Modified;
+                db.Entry(team).State = EntityState.Modified;
                 try
                 {
                     db.SaveChanges();
                 }
                 catch (DbUpdateException e)
                 {
-                    @ViewBag.Error = "Could not process match change";
+                    @ViewBag.Error = "Could not change team";
                     return View();
                 }
                 return RedirectToAction("Index");
             }
-            ViewBag.MatchID = new SelectList(db.SoloMatches, "MatchID", "MatchID", match.MatchID);
-            ViewBag.MatchID = new SelectList(db.TeamMatches, "MatchID", "MatchID", match.MatchID);
-            return View(match);
+            return View(team);
         }
 
-        // GET: Matches/Delete/5
+        // GET: Teams/Delete/5
         public ActionResult Delete(int? id)
         {
             if (Session["LoggedIn"] == null)
@@ -134,28 +125,28 @@ namespace eSportsTracker.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Match match = db.Matches.Find(id);
-            if (match == null)
+            Team team = db.Teams.Find(id);
+            if (team == null)
             {
                 return HttpNotFound();
             }
-            return View(match);
+            return View(team);
         }
 
-        // POST: Matches/Delete/5
+        // POST: Teams/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Match match = db.Matches.Find(id);
-            db.Matches.Remove(match);
+            Team team = db.Teams.Find(id);
+            db.Teams.Remove(team);
             try
             {
                 db.SaveChanges();
             }
             catch (DbUpdateException e)
             {
-                @ViewBag.Error = "Could not remove match record";
+                @ViewBag.Error = "Could not remove team records";
                 return View();
             }
             return RedirectToAction("Index");
