@@ -5,6 +5,7 @@ using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using eSportsTracker.Models;
@@ -15,15 +16,37 @@ namespace eSportsTracker.Controllers
     {
         private EsportsTrackerEntities1 db = new EsportsTrackerEntities1();
 
+        public async Task OnGetAsync(string searchString)
+        {
+            var players = from m in db.Players
+                          select m;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                players = players.Where(s => s.Handle.Contains(searchString));
+            }
+
+            List<Player> player = await players.ToListAsync();
+        }
+
         // GET: Players
-        public ActionResult Index()
-        { 
-            return View(db.Players.ToList());
+        public ActionResult Index(string searchString)
+        {
+            var players = from m in db.Players
+                          select m;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                players = players.Where(s => s.Handle.Contains(searchString));
+            }
+
+            return View(players);
         }
 
         // GET: Players/Details/5
         public ActionResult Details(int? id)
         {
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);

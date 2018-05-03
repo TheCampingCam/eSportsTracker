@@ -8,7 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using eSportsTracker.Models;
 
-namespace eSportsTracker.Views.VideoGames
+namespace eSportsTracker.Controllers
 {
     public class MatchesController : Controller
     {
@@ -39,10 +39,6 @@ namespace eSportsTracker.Views.VideoGames
         // GET: Matches/Create
         public ActionResult Create()
         {
-            if (Session["LoggedIn"] == null)
-            {
-                return RedirectToAction("Index", "Home", new { area = "" });
-            }
             ViewBag.MatchID = new SelectList(db.SoloMatches, "MatchID", "MatchID");
             ViewBag.MatchID = new SelectList(db.TeamMatches, "MatchID", "MatchID");
             return View();
@@ -70,10 +66,6 @@ namespace eSportsTracker.Views.VideoGames
         // GET: Matches/Edit/5
         public ActionResult Edit(int? id)
         {
-            if (Session["LoggedIn"] == null)
-            {
-                return RedirectToAction("Index", "Home", new { area = "" });
-            }
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -109,10 +101,6 @@ namespace eSportsTracker.Views.VideoGames
         // GET: Matches/Delete/5
         public ActionResult Delete(int? id)
         {
-            if (Session["LoggedIn"] == null)
-            {
-                return RedirectToAction("Index", "Home", new { area = "" });
-            }
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
