@@ -4,6 +4,8 @@ using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
+using System.Security.Cryptography;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using eSportsTracker.Models;
@@ -13,27 +15,6 @@ namespace eSportsTracker.Controllers
     public class UsersController : Controller
     {
         private EsportsTrackerEntities1 db = new EsportsTrackerEntities1();
-
-        // GET: Users
-        public ActionResult Index()
-        {
-            return View(db.Users.ToList());
-        }
-
-        // GET: Users/Details/5
-        public ActionResult Details(string id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            User user = db.Users.Find(id);
-            if (user == null)
-            {
-                return HttpNotFound();
-            }
-            return View(user);
-        }
 
         // GET: Users/Create
         public ActionResult Create()
@@ -46,73 +27,62 @@ namespace eSportsTracker.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Username,PasswordSalt,PasswordHash")] User user)
+        public ActionResult Create(String username, String password)
         {
+            Models.User user = new Models.User();
+            user.Username = username;
+
+            byte[] salt = CreateSalt(16);
+            user.PasswordSalt = Convert.ToBase64String(salt);
+            user.PasswordHash = Convert.ToBase64String(GenerateSaltedHash(password, salt));
+
+            System.Security.Principal.IIdentity test = User.Identity;
+
             if (ModelState.IsValid)
             {
                 db.Users.Add(user);
                 db.SaveChanges();
+                Response.Cookies["Username"].Value = username;
+                Response.Cookies["Username"].Expires = DateTime.Now.AddMinutes(30);
+
+                Session["LoggedIn"] = "yes";
+
                 return RedirectToAction("Index");
             }
 
             return View(user);
         }
 
-        // GET: Users/Edit/5
-        public ActionResult Edit(string id)
+        public ActionResult LogIn()
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            User user = db.Users.Find(id);
-            if (user == null)
-            {
-                return HttpNotFound();
-            }
-            return View(user);
+            return View();
         }
 
-        // POST: Users/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Username,PasswordSalt,PasswordHash")] User user)
+        public ActionResult LogIn(String username, String password)
         {
-            if (ModelState.IsValid)
-            {
-                db.Entry(user).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+            Models.User user = db.Users.Find(username);
+
+            byte[] salt = Convert.FromBase64String(user.PasswordSalt);
+            if (user.PasswordHash.Equals(Convert.ToBase64String(GenerateSaltedHash(password, salt)))) {
+                Response.Cookies["Username"].Value = username;
+                Response.Cookies["Username"].Expires = DateTime.Now.AddMinutes(60);
+
+                Session["LoggedIn"] = "yes";
+
+                return RedirectToAction("Index", "Home", new { area = "" });
             }
-            return View(user);
+
+            return RedirectToAction("Home/Index");
         }
 
-        // GET: Users/Delete/5
-        public ActionResult Delete(string id)
+        public ActionResult LogOut()
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            User user = db.Users.Find(id);
-            if (user == null)
-            {
-                return HttpNotFound();
-            }
-            return View(user);
-        }
+            Response.Cookies["Username"].Value = null;
+            Session.Clear();
+            Session.Abandon();
 
-        // POST: Users/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(string id)
-        {
-            User user = db.Users.Find(id);
-            db.Users.Remove(user);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "Home", new { area = "" });
         }
 
         protected override void Dispose(bool disposing)
@@ -123,5 +93,38 @@ namespace eSportsTracker.Controllers
             }
             base.Dispose(disposing);
         }
+
+        private static byte[] CreateSalt(int size)
+        {
+            //Generate a cryptographic random number.
+            RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider();
+            byte[] salt = new byte[size];
+            rng.GetBytes(salt);
+
+            // Return a Base64 string representation of the random number.
+            return salt;
+        }
+
+        private static byte[] GenerateSaltedHash(string password, byte[] salt)
+        {
+            HashAlgorithm algorithm = new SHA256Managed();
+
+            byte[] plainText = Encoding.UTF8.GetBytes(password);
+
+            byte[] plainTextWithSaltBytes =
+              new byte[plainText.Length + salt.Length];
+
+            for (int i = 0; i < plainText.Length; i++)
+            {
+                plainTextWithSaltBytes[i] = plainText[i];
+            }
+            for (int i = 0; i < salt.Length; i++)
+            {
+                plainTextWithSaltBytes[plainText.Length + i] = salt[i];
+            }
+
+            return algorithm.ComputeHash(plainTextWithSaltBytes);
+        }
+
     }
 }

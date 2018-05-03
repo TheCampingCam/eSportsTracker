@@ -1,16 +1,16 @@
 ﻿@model eSportsTracker.Models.User
 
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "LogIn";
 }
 
-<h2>Create Admin Login</h2>
+<h2>Admin Login</h2>
 
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -30,7 +30,7 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <input type="submit" value="Log In" class="btn btn-default" />
             </div>
         </div>
     </div>

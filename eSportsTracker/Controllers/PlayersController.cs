@@ -16,7 +16,7 @@ namespace eSportsTracker.Controllers
 
         // GET: Players
         public ActionResult Index()
-        {
+        { 
             return View(db.Players.ToList());
         }
 
@@ -38,7 +38,10 @@ namespace eSportsTracker.Controllers
         // GET: Players/Create
         public ActionResult Create()
         {
-            return View();
+            if (Session["LoggedIn"] != null)
+                return View();
+            else
+                return RedirectToAction("Index");
         }
 
         // POST: Players/Create

@@ -1,5 +1,13 @@
 ﻿<!DOCTYPE html>
 <html>
+
+@{
+    string val = "";
+    if (Request.Cookies["Username"] != null)
+    {
+        val = Request.Cookies["Username"].Value;
+    } 
+}
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -22,10 +30,12 @@
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Players", "Index", "Players")</li>
                     <li>@Html.ActionLink("Video Games", "Index", "VideoGames")</li>
-                    <li>@Html.ActionLink("Organizations","Index","Organizations")</li>
+                    <li>@Html.ActionLink("Organizations", "Index", "Organizations")</li>
                     <li>@Html.ActionLink("About", "About", "Home")</li>
                     <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
                 </ul>
+
+                <div class="navbar-brand" style="float:right">@val</div>
             </div>
         </div>
     </div>
@@ -33,7 +43,8 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - eSportsTracker.</p>
+            @Html.ActionLink("Administrator Log In", "LogIn", "Users")
+            <div style="float:right">@Html.ActionLink("Log Out", "LogOut", "Users")</div>
         </footer>
     </div>
 
