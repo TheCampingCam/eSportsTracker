@@ -73,15 +73,22 @@ namespace eSportsTracker.Controllers
         {
             Models.User user = db.Users.Find(username);
 
-            byte[] salt = Convert.FromBase64String(user.PasswordSalt);
-            if (user.PasswordHash.Equals(Convert.ToBase64String(GenerateSaltedHash(password, salt))))
+            try
             {
-                Response.Cookies["Username"].Value = username;
-                Response.Cookies["Username"].Expires = DateTime.Now.AddMinutes(60);
+                byte[] salt = Convert.FromBase64String(user.PasswordSalt);
+                if (user.PasswordHash.Equals(Convert.ToBase64String(GenerateSaltedHash(password, salt))))
+                {
+                    Response.Cookies["Username"].Value = username;
+                    Response.Cookies["Username"].Expires = DateTime.Now.AddMinutes(60);
 
-                Session["LoggedIn"] = "yes";
+                    Session["LoggedIn"] = "yes";
 
-                return RedirectToAction("Index", "Home", new { area = "" });
+                    return RedirectToAction("Index", "Home", new { area = "" });
+                }
+            } catch (Exception e)
+            {
+                ViewBag.Error = "Could Not Log In";
+                return View();
             }
 
             return RedirectToAction("Home/Index");
