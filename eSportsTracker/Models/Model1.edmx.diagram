@@ -37,6 +37,9 @@
         <AssociationConnector Association="EsportsTrackerModel.ParticipatesIn" ManuallyRouted="false" />
         <AssociationConnector Association="EsportsTrackerModel.PartOf" ManuallyRouted="false" />
         <AssociationConnector Association="EsportsTrackerModel.PlaysOn" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="EsportsTrackerModel.MatchesView" Width="1.5" PointX="6.375" PointY="0.75" />
+        <AssociationConnector Association="EsportsTrackerModel.FK_SoloMatch_LOSER" />
+        <AssociationConnector Association="EsportsTrackerModel.FK_SoloMatch_SoloMatch" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

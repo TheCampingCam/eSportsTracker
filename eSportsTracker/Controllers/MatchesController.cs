@@ -15,11 +15,20 @@ namespace eSportsTracker.Controllers
     {
         private EsportsTrackerEntities1 db = new EsportsTrackerEntities1();
 
-        // GET: Matches
-        public ActionResult Index()
+        // GET MATCHES
+        public ActionResult Index(string searchString)
         {
-            var matches = db.Matches.Include(m => m.SoloMatch).Include(m => m.TeamMatch);
-            return View(matches.ToList());
+            var matches = from m in db.MatchesViews
+                          select m;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                matches = matches.Where(s => s.Winner.Contains(searchString) || s.Loser.Contains(searchString));
+
+                //matches = matches.Where(s => s.Handle.Contains(searchString)); 
+            }
+
+            return View(matches);
         }
 
         // GET: Matches/Details/5

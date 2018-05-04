@@ -1,4 +1,4 @@
-﻿@model IEnumerable<eSportsTracker.Models.Match>
+﻿@model IEnumerable<eSportsTracker.Models.MatchesView>
 
 @{
     ViewBag.Title = "Index";
@@ -14,36 +14,47 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.TimePlayed)
+            @Html.DisplayNameFor(model => model.MatchID)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.SoloMatch.MatchID)
+            @Html.DisplayNameFor(model => model.Winner)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.TeamMatch.MatchID)
+            @Html.DisplayNameFor(model => model.Loser)
         </th>
-        <th></th>
+        <th>
+            @Html.DisplayNameFor(model => model.TournamentName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.GameName)
+        </th>
     </tr>
 
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.TimePlayed)
+            @Html.DisplayFor(modelItem => item.MatchID)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.SoloMatch.MatchID)
+            @Html.DisplayFor(modelItem => item.Winner)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.TeamMatch.MatchID)
+            @Html.DisplayFor(modelItem => item.Loser)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TournamentName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.GameName)
         </td>
         <td>
             @{
-             if (Session["LoggedIn"] != null)
+            if (Session["LoggedIn"] != null)
             {
-                 @Html.ActionLink("Edit", "Edit", new { id = item.MatchID }) <text>|</text>
-                 @Html.ActionLink("Details", "Details", new { id = item.MatchID }) <text>|</text>
-                 @Html.ActionLink("Delete", "Delete", new { id = item.MatchID })
-}
+                @Html.ActionLink("Edit", "Edit", new { id = item.MatchID }) <text>|</text>
+                @Html.ActionLink("Details", "Details", new { id = item.MatchID }) <text>|</text>
+                @Html.ActionLink("Delete", "Delete", new { id = item.MatchID })
+        }
 
             }
         </td>

@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="EsportsTrackerModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="EsportsTrackerModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="AttributesTable">
           <Key>
             <PropertyRef Name="AttributeID" />
@@ -119,6 +119,7 @@
           </Key>
           <Property Name="MatchID" Type="int" Nullable="false" />
           <Property Name="Winner" Type="int" />
+          <Property Name="Loser" Type="int" />
         </EntityType>
         <EntityType Name="SponsoredBy">
           <Key>
@@ -172,6 +173,21 @@
           <Property Name="Developer" Type="varchar" MaxLength="32" />
           <Property Name="Publisher" Type="varchar" MaxLength="32" />
           <Property Name="GameID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'EsportsTracker.dbo.MatchesView' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="MatchesView">
+          <Key>
+            <PropertyRef Name="MatchID" />
+            <PropertyRef Name="Winner" />
+            <PropertyRef Name="Loser" />
+            <PropertyRef Name="GameName" />
+          </Key>
+          <Property Name="MatchID" Type="int" Nullable="false" />
+          <Property Name="TournamentName" Type="varchar" MaxLength="32" />
+          <Property Name="Winner" Type="varchar" MaxLength="32" Nullable="false" />
+          <Property Name="Loser" Type="varchar" MaxLength="32" Nullable="false" />
+          <Property Name="GameName" Type="varchar" MaxLength="32" Nullable="false" />
         </EntityType>
         <Association Name="FK_CompetesIn_Team">
           <End Role="Team" Type="Self.Team" Multiplicity="1" />
@@ -413,6 +429,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_SoloMatch_LOSER">
+          <End Role="SoloMatch" Type="Self.SoloMatch" Multiplicity="1" />
+          <End Role="SoloMatch1" Type="Self.SoloMatch" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="SoloMatch">
+              <PropertyRef Name="MatchID" />
+            </Principal>
+            <Dependent Role="SoloMatch1">
+              <PropertyRef Name="MatchID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SoloMatch_SoloMatch">
+          <End Role="SoloMatch" Type="Self.SoloMatch" Multiplicity="1" />
+          <End Role="SoloMatch1" Type="Self.SoloMatch" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="SoloMatch">
+              <PropertyRef Name="MatchID" />
+            </Principal>
+            <Dependent Role="SoloMatch1">
+              <PropertyRef Name="MatchID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_SOLOMATCH_WINNER">
           <End Role="Player" Type="Self.Player" Multiplicity="0..1" />
           <End Role="SoloMatch" Type="Self.SoloMatch" Multiplicity="*" />
@@ -506,6 +546,15 @@
           <EntitySet Name="Tournament" EntityType="Self.Tournament" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="VideoGame" EntityType="Self.VideoGame" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MatchesView" EntityType="Self.MatchesView" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [MatchesView].[MatchID] AS [MatchID], 
+    [MatchesView].[TournamentName] AS [TournamentName], 
+    [MatchesView].[Winner] AS [Winner], 
+    [MatchesView].[Loser] AS [Loser], 
+    [MatchesView].[GameName] AS [GameName]
+    FROM [dbo].[MatchesView] AS [MatchesView]</DefiningQuery>
+          </EntitySet>
           <AssociationSet Name="FK_CompetesIn_Team" Association="Self.FK_CompetesIn_Team">
             <End Role="Team" EntitySet="Team" />
             <End Role="CompetesIn" EntitySet="CompetesIn" />
@@ -586,6 +635,14 @@
             <End Role="Match" EntitySet="Match" />
             <End Role="SoloMatch" EntitySet="SoloMatch" />
           </AssociationSet>
+          <AssociationSet Name="FK_SoloMatch_LOSER" Association="Self.FK_SoloMatch_LOSER">
+            <End Role="SoloMatch" EntitySet="SoloMatch" />
+            <End Role="SoloMatch1" EntitySet="SoloMatch" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SoloMatch_SoloMatch" Association="Self.FK_SoloMatch_SoloMatch">
+            <End Role="SoloMatch" EntitySet="SoloMatch" />
+            <End Role="SoloMatch1" EntitySet="SoloMatch" />
+          </AssociationSet>
           <AssociationSet Name="FK_SOLOMATCH_WINNER" Association="Self.FK_SOLOMATCH_WINNER">
             <End Role="Player" EntitySet="Player" />
             <End Role="SoloMatch" EntitySet="SoloMatch" />
@@ -611,8 +668,7 @@
             <End Role="Tournament" EntitySet="Tournament" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="EsportsTrackerModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -698,6 +754,11 @@
           <Property Name="Winner" Type="Int32" />
           <NavigationProperty Name="Match" Relationship="Self.FK_SOLOMATCH_ISA" FromRole="SoloMatch" ToRole="Match" />
           <NavigationProperty Name="Player" Relationship="Self.FK_SOLOMATCH_WINNER" FromRole="SoloMatch" ToRole="Player" />
+          <Property Name="Loser" Type="Int32" />
+          <NavigationProperty Name="SoloMatch1" Relationship="EsportsTrackerModel.FK_SoloMatch_LOSER" FromRole="SoloMatch" ToRole="SoloMatch1" />
+          <NavigationProperty Name="SoloMatch2" Relationship="EsportsTrackerModel.FK_SoloMatch_LOSER" FromRole="SoloMatch1" ToRole="SoloMatch" />
+          <NavigationProperty Name="SoloMatch11" Relationship="EsportsTrackerModel.FK_SoloMatch_SoloMatch" FromRole="SoloMatch" ToRole="SoloMatch1" />
+          <NavigationProperty Name="SoloMatch3" Relationship="EsportsTrackerModel.FK_SoloMatch_SoloMatch" FromRole="SoloMatch1" ToRole="SoloMatch" />
         </EntityType>
         <EntityType Name="SponsoredBy">
           <Key>
@@ -1029,7 +1090,53 @@
             <End Role="Player" EntitySet="Players" />
             <End Role="Team" EntitySet="Teams" />
           </AssociationSet>
+          <EntitySet Name="MatchesViews" EntityType="EsportsTrackerModel.MatchesView" />
+          <AssociationSet Name="FK_SoloMatch_LOSER" Association="EsportsTrackerModel.FK_SoloMatch_LOSER">
+            <End Role="SoloMatch" EntitySet="SoloMatches" />
+            <End Role="SoloMatch1" EntitySet="SoloMatches" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SoloMatch_SoloMatch" Association="EsportsTrackerModel.FK_SoloMatch_SoloMatch">
+            <End Role="SoloMatch" EntitySet="SoloMatches" />
+            <End Role="SoloMatch1" EntitySet="SoloMatches" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="MatchesView">
+          <Key>
+            <PropertyRef Name="MatchID" />
+            <PropertyRef Name="Winner" />
+            <PropertyRef Name="Loser" />
+            <PropertyRef Name="GameName" />
+          </Key>
+          <Property Name="MatchID" Type="Int32" Nullable="false" />
+          <Property Name="TournamentName" Type="String" MaxLength="32" FixedLength="false" Unicode="false" />
+          <Property Name="Winner" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="false" />
+          <Property Name="Loser" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="false" />
+          <Property Name="GameName" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <Association Name="FK_SoloMatch_LOSER">
+          <End Type="EsportsTrackerModel.SoloMatch" Role="SoloMatch" Multiplicity="1" />
+          <End Type="EsportsTrackerModel.SoloMatch" Role="SoloMatch1" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="SoloMatch">
+              <PropertyRef Name="MatchID" />
+            </Principal>
+            <Dependent Role="SoloMatch1">
+              <PropertyRef Name="MatchID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SoloMatch_SoloMatch">
+          <End Type="EsportsTrackerModel.SoloMatch" Role="SoloMatch" Multiplicity="1" />
+          <End Type="EsportsTrackerModel.SoloMatch" Role="SoloMatch1" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="SoloMatch">
+              <PropertyRef Name="MatchID" />
+            </Principal>
+            <Dependent Role="SoloMatch1">
+              <PropertyRef Name="MatchID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1094,6 +1201,7 @@
           <EntitySetMapping Name="SoloMatches">
             <EntityTypeMapping TypeName="EsportsTrackerModel.SoloMatch">
               <MappingFragment StoreEntitySet="SoloMatch">
+                <ScalarProperty Name="Loser" ColumnName="Loser" />
                 <ScalarProperty Name="MatchID" ColumnName="MatchID" />
                 <ScalarProperty Name="Winner" ColumnName="Winner" />
               </MappingFragment>
@@ -1214,6 +1322,17 @@
               <ScalarProperty Name="TeamID" ColumnName="TeamID" />
             </EndProperty>
           </AssociationSetMapping>
+          <EntitySetMapping Name="MatchesViews">
+            <EntityTypeMapping TypeName="EsportsTrackerModel.MatchesView">
+              <MappingFragment StoreEntitySet="MatchesView">
+                <ScalarProperty Name="GameName" ColumnName="GameName" />
+                <ScalarProperty Name="Loser" ColumnName="Loser" />
+                <ScalarProperty Name="Winner" ColumnName="Winner" />
+                <ScalarProperty Name="TournamentName" ColumnName="TournamentName" />
+                <ScalarProperty Name="MatchID" ColumnName="MatchID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

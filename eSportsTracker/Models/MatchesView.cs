@@ -12,17 +12,12 @@ namespace eSportsTracker.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class SoloMatch
+    public partial class MatchesView
     {
         public int MatchID { get; set; }
-        public Nullable<int> Winner { get; set; }
-        public Nullable<int> Loser { get; set; }
-    
-        public virtual Match Match { get; set; }
-        public virtual Player Player { get; set; }
-        public virtual SoloMatch SoloMatch1 { get; set; }
-        public virtual SoloMatch SoloMatch2 { get; set; }
-        public virtual SoloMatch SoloMatch11 { get; set; }
-        public virtual SoloMatch SoloMatch3 { get; set; }
+        public string TournamentName { get; set; }
+        public string Winner { get; set; }
+        public string Loser { get; set; }
+        public string GameName { get; set; }
     }
 }
