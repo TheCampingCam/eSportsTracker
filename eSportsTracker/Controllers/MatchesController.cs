@@ -16,10 +16,26 @@ namespace eSportsTracker.Controllers
         private EsportsTrackerEntities1 db = new EsportsTrackerEntities1();
 
         // GET: Matches
-        public ActionResult Index()
+        // Search on one player by handle
+        // Implement more searches (winner) later
+        public ActionResult Index(string searchString)
         {
-            var matches = db.Matches.Include(m => m.SoloMatch).Include(m => m.TeamMatch);
-            return View(matches.ToList());
+            var matches = from m in db.Matches
+                          select m ;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                matches = from p in db.PlaysIn
+                          join v in db.Matches on p.MatchID equals v.MatchID
+                          join s in db.Players on s.PlayerID equals p.PlayerID
+                          where s.Handle.Contains(searchString)
+                          select new { TimePLayed = v.TimePlayed, Won = p.Wins };
+                
+                
+                //matches = matches.Where(s => s.Handle.Contains(searchString)); 
+            }
+
+            return View(matches);
         }
 
         // GET: Matches/Details/5
