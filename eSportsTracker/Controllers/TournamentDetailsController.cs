@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
-using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -11,148 +10,108 @@ using eSportsTracker.Models;
 
 namespace eSportsTracker.Controllers
 {
-    public class TeamsController : Controller
+    public class TournamentDetailsController : Controller
     {
         private EsportsTrackerEntities1 db = new EsportsTrackerEntities1();
 
-        // GET: Teams
+        // GET: TournamentDetails
         public ActionResult Index()
         {
-            return View(db.Teams.ToList());
+            return View(db.TournamentDetails.ToList());
         }
 
-        // GET: Teams/Details/5
+        // GET: TournamentDetails/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Team team = db.Teams.Find(id);
-            if (team == null)
+            TournamentDetails tournamentDetails = db.TournamentDetails.Find(id);
+            if (tournamentDetails == null)
             {
                 return HttpNotFound();
             }
-            return View(team);
+            return View(tournamentDetails);
         }
 
-        // GET: Teams/Create
+        // GET: TournamentDetails/Create
         public ActionResult Create()
         {
-            if (Session["LoggedIn"] == null)
-            {
-                return RedirectToAction("Index");
-            }
             return View();
         }
 
-        // POST: Teams/Create
+        // POST: TournamentDetails/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "TeamName,NumPlayers,TeamID")] Team team)
+        public ActionResult Create([Bind(Include = "TournamentID,Date,Name,Organizer,Location,Game,Participant")] TournamentDetails tournamentDetails)
         {
-            if (team.NumPlayers <= 0) {
-                @ViewBag.Error = "Invalid number of players";
-                return View();
-            }
             if (ModelState.IsValid)
             {
-                db.Teams.Add(team);
-                try
-                {
-                    db.SaveChanges();
-                }
-                catch (DbUpdateException e)
-                {
-                    @ViewBag.Error = "Could not process team";
-                    return View();
-                }
+                db.TournamentDetails.Add(tournamentDetails);
+                db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(team);
+            return View(tournamentDetails);
         }
 
-        // GET: Teams/Edit/5
+        // GET: TournamentDetails/Edit/5
         public ActionResult Edit(int? id)
         {
-            if (Session["LoggedIn"] == null)
-            {
-                return RedirectToAction("Index");
-            }
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Team team = db.Teams.Find(id);
-            if (team == null)
+            TournamentDetails tournamentDetails = db.TournamentDetails.Find(id);
+            if (tournamentDetails == null)
             {
                 return HttpNotFound();
             }
-            return View(team);
+            return View(tournamentDetails);
         }
 
-        // POST: Teams/Edit/5
+        // POST: TournamentDetails/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "TeamName,NumPlayers,TeamID")] Team team)
+        public ActionResult Edit([Bind(Include = "TournamentID,Date,Name,Organizer,Location,Game,Participant")] TournamentDetails tournamentDetails)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(team).State = EntityState.Modified;
-                try
-                {
-                    db.SaveChanges();
-                }
-                catch (DbUpdateException e)
-                {
-                    @ViewBag.Error = "Could not change team";
-                    return View();
-                }
+                db.Entry(tournamentDetails).State = EntityState.Modified;
+                db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(team);
+            return View(tournamentDetails);
         }
 
-        // GET: Teams/Delete/5
+        // GET: TournamentDetails/Delete/5
         public ActionResult Delete(int? id)
         {
-            if (Session["LoggedIn"] == null)
-            {
-                return RedirectToAction("Index");
-            }
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Team team = db.Teams.Find(id);
-            if (team == null)
+            TournamentDetails tournamentDetails = db.TournamentDetails.Find(id);
+            if (tournamentDetails == null)
             {
                 return HttpNotFound();
             }
-            return View(team);
+            return View(tournamentDetails);
         }
 
-        // POST: Teams/Delete/5
+        // POST: TournamentDetails/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Team team = db.Teams.Find(id);
-            db.Teams.Remove(team);
-            try
-            {
-                db.SaveChanges();
-            }
-            catch (DbUpdateException e)
-            {
-                @ViewBag.Error = "Could not remove team records";
-                return View();
-            }
+            TournamentDetails tournamentDetails = db.TournamentDetails.Find(id);
+            db.TournamentDetails.Remove(tournamentDetails);
+            db.SaveChanges();
             return RedirectToAction("Index");
         }
 

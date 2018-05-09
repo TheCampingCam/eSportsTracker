@@ -39,5 +39,6 @@ namespace eSportsTracker.Models
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<VideoGame> VideoGames { get; set; }
         public virtual DbSet<MatchesView> MatchesViews { get; set; }
+        public virtual DbSet<TournamentDetails> TournamentDetails { get; set; }
     }
 }
