@@ -24,7 +24,16 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("eSportsTracker", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                @{ if (!val.Equals(""))
+                    {
+                    @Html.ActionLink(@val, "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+
+                    } else
+                    {
+                    @Html.ActionLink("eSportsTracker", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+
+                    }
+                    }
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
@@ -36,8 +45,6 @@
                     <li>@Html.ActionLink("About", "About", "Home")</li>
                     <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
                 </ul>
-
-                <div class="navbar-brand" style="float:right">@val</div>
             </div>
     <div style="color:red">@ViewBag.Error</div>
         </div>
