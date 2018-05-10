@@ -3,7 +3,7 @@
 
 @{
     string val = "";
-    if (Request.Cookies["Username"] != null)
+    if (Request.Cookies["Username"] != null && Session["LoggedIn"] != null)
     {
         val = Request.Cookies["Username"].Value;
     } 

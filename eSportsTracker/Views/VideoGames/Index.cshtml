@@ -13,11 +13,17 @@
 </p>
 <table class="table">
     <tr>
+        @{if (Session["LoggedIn"] != null)
+        {
+            <th>
+                @Html.DisplayNameFor(model => model.GameID)
+            </th>
+        }}
         <th>
-            @Html.DisplayNameFor(model => model.GameName)
+            Name
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Released)
+            Release Date
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Genre)
@@ -33,6 +39,12 @@
 
 @foreach (var item in Model) {
     <tr>
+        @{if (Session["LoggedIn"] != null)
+        {
+            <td>
+                @Html.DisplayFor(modelItem => item.GameID)
+            </td>
+        }}
         <td>
             @Html.DisplayFor(modelItem => item.GameName)
         </td>
@@ -50,11 +62,11 @@
         </td>
         <td>
             @{ if (Session["LoggedIn"] != null)
-               {
-                    @Html.ActionLink("Edit", "Edit", new { id = item.GameID }) <text>|</text>
-                    @Html.ActionLink("Details", "Details", new { id = item.GameID }) <text>|</text>
-                    @Html.ActionLink("Delete", "Delete", new { id = item.GameID })
-               }
+            {
+                @Html.ActionLink("Edit", "Edit", new { id = item.GameID }) <text>|</text>
+                @Html.ActionLink("Details", "Details", new { id = item.GameID }) <text>|</text>
+                @Html.ActionLink("Delete", "Delete", new { id = item.GameID })
+        }
             }
         </td>
     </tr>
