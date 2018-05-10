@@ -1,26 +1,39 @@
-﻿@model IEnumerable<eSportsTracker.Models.MatchesView>
+﻿@model PagedList.IPagedList<eSportsTracker.Models.MatchesView>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 
 @{
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<h2>Matches</h2>
 
 <p>
     @if (Session["LoggedIn"] != null)
     {
         @Html.ActionLink("Create New", "Create")}
 </p>
+
+<form>
+    <p>
+        Search: <input type="text" name="SearchString">
+        <input type="submit" value="Filter" />
+    </p>
+</form>
+
 <table class="table">
     <tr>
+        @{ if (Session["LoggedIn"] != null)
+        {
+            <th>
+                MatchID
+            </th>
+    } }
         <th>
-            @Html.DisplayNameFor(model => model.MatchID)
+            Winner
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Winner)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Loser)
+            Loser
         </th>
         <th>
             Tournament Name
@@ -28,37 +41,51 @@
         <th>
             Game Name
         </th>
+        @{ if (Session["LoggedIn"] != null)
+        {
+            <th>
+               Administrative
+            </th>
+    } }
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.MatchID)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Winner)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Loser)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.TournamentName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.GameName)
-        </td>
-        <td>
-            @{
-            if (Session["LoggedIn"] != null)
-            {
-                @Html.ActionLink("Edit", "Edit", new { id = item.MatchID }) <text>|</text>
-                @Html.ActionLink("Details", "Details", new { id = item.MatchID }) <text>|</text>
-                @Html.ActionLink("Delete", "Delete", new { id = item.MatchID })
-        }
+    @foreach (var item in Model)
+    {
+        <tr>
+            @{ if (Session["LoggedIn"] != null) {
+            <td>
+                @Html.DisplayFor(modelItem => item.MatchID)
+            </td>
+                    } }
+            <td>
+                @Html.DisplayFor(modelItem => item.Winner)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Loser)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TournamentName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.GameName)
+            </td>
+            <td>
+                @{
+                    if (Session["LoggedIn"] != null)
+                    {
+                        @Html.ActionLink("Edit", "Edit", new { id = item.MatchID }) <text>|</text>
+                        @Html.ActionLink("Details", "Details", new { id = item.MatchID }) <text>|</text>
+                        @Html.ActionLink("Delete", "Delete", new { id = item.MatchID })
+                    }
 
-            }
-        </td>
-    </tr>
-}
+                }
+            </td>
+        </tr>
+    }
 
 </table>
+
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("Index",
+    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
