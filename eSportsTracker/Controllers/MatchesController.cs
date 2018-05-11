@@ -80,13 +80,14 @@ namespace eSportsTracker.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "MatchID,TimePlayed")] Match match)
+        public ActionResult Create([Bind(Include = "TimePlayed,Winner,Loser,TournamentID,GameID")] MatchMaker match)
         {
             if (ModelState.IsValid)
             {
-                db.Matches.Add(match);
+                
                 try
                 {
+                    db.MakeMatchEasy(match.TimePlayed, match.TournamentID, match.Winner, match.Loser, match.GameID);
                     db.SaveChanges();
                 }
                 catch (DbUpdateException e)
@@ -96,9 +97,7 @@ namespace eSportsTracker.Controllers
                 }
                 return RedirectToAction("Index");
             }
-
-            ViewBag.MatchID = new SelectList(db.SoloMatches, "MatchID", "MatchID", match.MatchID);
-            ViewBag.MatchID = new SelectList(db.TeamMatches, "MatchID", "MatchID", match.MatchID);
+            
             return View(match);
         }
 
