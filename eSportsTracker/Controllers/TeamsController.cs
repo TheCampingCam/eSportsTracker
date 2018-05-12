@@ -8,6 +8,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using eSportsTracker.Models;
+using PagedList;
 
 namespace eSportsTracker.Controllers
 {
@@ -16,9 +17,17 @@ namespace eSportsTracker.Controllers
         private EsportsTrackerEntities1 db = new EsportsTrackerEntities1();
 
         // GET: Teams
-        public ActionResult Index()
+        public ActionResult Index(int? page)
         {
-            return View(db.Teams.ToList());
+
+            int pageSize = 10;
+            int pageNumber = (page ?? 1);
+
+            var teams = from m in db.Teams
+                        orderby m.TeamName
+                        select m;
+
+           return View(teams.ToPagedList(pageNumber, pageSize));
         }
 
         // GET: Teams/Details/5

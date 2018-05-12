@@ -1,5 +1,6 @@
-﻿@model IEnumerable<eSportsTracker.Models.Team>
-
+﻿@model PagedList.IPagedList<eSportsTracker.Models.Team>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 @{
     ViewBag.Title = "Index";
 }
@@ -14,11 +15,11 @@
 <table class="table">
     <tr>
         @{if (Session["LoggedIn"] != null)
-        {
-            <th>
-                @Html.DisplayNameFor(model => model.TeamID)
-            </th>
-        }}
+            {
+                <th>
+                    TeamID
+                </th>
+            }}
         <th>
             Name
         </th>
@@ -28,32 +29,38 @@
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        @{if (Session["LoggedIn"] != null)
-        {
+    @foreach (var item in Model)
+    {
+        <tr>
+            @{if (Session["LoggedIn"] != null)
+                {
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TeamID)
+                    </td>
+                }}
             <td>
-                @Html.DisplayFor(modelItem => item.TeamID)
+                @Html.DisplayFor(modelItem => item.TeamName)
             </td>
-        }}
-        <td>
-            @Html.DisplayFor(modelItem => item.TeamName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.NumPlayers)
-        </td>
-        <td>
-            @{
-            if (Session["LoggedIn"] != null)
-            {
-                @Html.ActionLink("Edit", "Edit", new { id = item.TeamID }) <text>|</text>
-                @Html.ActionLink("Details", "Details", new { id = item.TeamID }) <text>|</text>
-                @Html.ActionLink("Delete", "Delete", new { id = item.TeamID })
-        }
+            <td>
+                @Html.DisplayFor(modelItem => item.NumPlayers)
+            </td>
+            <td>
+                @{
+                    if (Session["LoggedIn"] != null)
+                    {
+                        @Html.ActionLink("Edit", "Edit", new { id = item.TeamID }) <text>|</text>
+                        @Html.ActionLink("Details", "Details", new { id = item.TeamID }) <text>|</text>
+                        @Html.ActionLink("Delete", "Delete", new { id = item.TeamID })
+                    }
 
-            }
-        </td>
-    </tr>
-}
+                }
+            </td>
+        </tr>
+    }
 
 </table>
+<br />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("Index",
+    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
