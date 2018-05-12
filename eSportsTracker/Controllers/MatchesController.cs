@@ -90,7 +90,7 @@ namespace eSportsTracker.Controllers
                     db.MakeMatchEasy(match.TimePlayed, match.TournamentID, match.Winner, match.Loser, match.GameID);
                     db.SaveChanges();
                 }
-                catch (DbUpdateException e)
+                catch (Exception e)
                 {
                     @ViewBag.Error = "Could not process match";
                     return View();
