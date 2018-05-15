@@ -11,7 +11,12 @@
 <p>
     @if (Session["LoggedIn"] != null)
     {
-        @Html.ActionLink("Create New", "Create")}
+        @Html.ActionLink("Create Team Match", "Create", "TeamMatches", new { }, null)
+        <br />
+        @Html.ActionLink("Create Solo Match", "Create", "SoloMatches", new { }, null)
+        <br />
+        @Html.ActionLink("Create Generic Match", "Create")
+    }
 </p>
 
 <form>
