@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using eSportsTracker.Models;
+using PagedList;
 
 namespace eSportsTracker.Controllers
 {
@@ -17,17 +18,44 @@ namespace eSportsTracker.Controllers
         private EsportsTrackerEntities1 db = new EsportsTrackerEntities1();
 
         // GET: Players
-        public ActionResult Index(string searchString)
+        public ActionResult Index(string currentFilter, string searchString, string sortOrder, int? page)
         {
+            ViewBag.CurrentSort = sortOrder;
+            ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewBag.CurrentFilter = searchString;
+
             var players = from m in db.Players
                           select m;
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                players = players.Where(s => s.Handle.Contains(searchString));
+                players = players.Where(s => s.Handle.Contains(searchString) || s.FName.Contains(searchString) || s.LName.Contains(searchString));
             }
 
-            return View(players);
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    players = players.OrderByDescending(s => s.Handle);
+                    break;
+                default:
+                    players = players.OrderBy(s => s.PlayerID);
+                    break;
+            }
+
+
+            int pageSize = 10;
+            int pageNumber = (page ?? 1);
+            return View(players.ToPagedList(pageNumber, pageSize));
         }
 
         // GET: Players/Details/5

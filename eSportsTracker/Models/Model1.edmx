@@ -133,7 +133,7 @@
           <Key>
             <PropertyRef Name="TeamID" />
           </Key>
-          <Property Name="TeamName" Type="varchar" MaxLength="32" />
+          <Property Name="TeamName" Type="varchar" MaxLength="32" Nullable="false" />
           <Property Name="NumPlayers" Type="int" Nullable="false" />
           <Property Name="TeamID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
         </EntityType>
@@ -149,7 +149,7 @@
             <PropertyRef Name="TournamentID" />
           </Key>
           <Property Name="TournamentDate" Type="date" Nullable="false" />
-          <Property Name="TournamentName" Type="varchar" MaxLength="32" />
+          <Property Name="TournamentName" Type="varchar" MaxLength="64" />
           <Property Name="Organizer" Type="varchar" MaxLength="32" Nullable="false" />
           <Property Name="TournamentLocation" Type="varchar" MaxLength="32" Nullable="false" />
           <Property Name="TournamentID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
@@ -188,6 +188,56 @@ warning 6002: The table/view 'EsportsTracker.dbo.MatchesView' does not have a pr
           <Property Name="Winner" Type="varchar" MaxLength="32" Nullable="false" />
           <Property Name="Loser" Type="varchar" MaxLength="32" Nullable="false" />
           <Property Name="GameName" Type="varchar" MaxLength="32" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'EsportsTracker.dbo.MatchMaker' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="MatchMaker">
+          <Key>
+            <PropertyRef Name="TimePlayed" />
+            <PropertyRef Name="TournamentID" />
+            <PropertyRef Name="Winner" />
+            <PropertyRef Name="Loser" />
+            <PropertyRef Name="GameID" />
+          </Key>
+          <Property Name="TimePlayed" Type="time" Precision="7" Nullable="false" />
+          <Property Name="TournamentID" Type="int" Nullable="false" />
+          <Property Name="Winner" Type="int" Nullable="false" />
+          <Property Name="Loser" Type="int" Nullable="false" />
+          <Property Name="GameID" Type="int" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'EsportsTracker.dbo.TournamentDetails' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="TournamentDetails">
+          <Key>
+            <PropertyRef Name="TournamentID" />
+            <PropertyRef Name="Date" />
+            <PropertyRef Name="Organizer" />
+            <PropertyRef Name="Location" />
+          </Key>
+          <Property Name="TournamentID" Type="int" Nullable="false" />
+          <Property Name="Date" Type="date" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="32" />
+          <Property Name="Organizer" Type="varchar" MaxLength="32" Nullable="false" />
+          <Property Name="Location" Type="varchar" MaxLength="32" Nullable="false" />
+          <Property Name="Game" Type="varchar" MaxLength="32" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'EsportsTracker.dbo.TournamentDetailsExtended' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="TournamentDetailsExtended">
+          <Key>
+            <PropertyRef Name="TournamentID" />
+            <PropertyRef Name="Date" />
+            <PropertyRef Name="Organizer" />
+            <PropertyRef Name="Location" />
+            <PropertyRef Name="Participant" />
+          </Key>
+          <Property Name="TournamentID" Type="int" Nullable="false" />
+          <Property Name="Date" Type="date" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="32" />
+          <Property Name="Organizer" Type="varchar" MaxLength="32" Nullable="false" />
+          <Property Name="Location" Type="varchar" MaxLength="32" Nullable="false" />
+          <Property Name="Game" Type="varchar" MaxLength="32" />
+          <Property Name="Participant" Type="varchar" MaxLength="32" Nullable="false" />
         </EntityType>
         <Association Name="FK_CompetesIn_Team">
           <End Role="Team" Type="Self.Team" Multiplicity="1" />
@@ -525,6 +575,20 @@ warning 6002: The table/view 'EsportsTracker.dbo.MatchesView' does not have a pr
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="insertTournament" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="date" Type="date" Mode="In" />
+          <Parameter Name="name" Type="varchar" Mode="In" />
+          <Parameter Name="organizer" Type="varchar" Mode="In" />
+          <Parameter Name="location" Type="varchar" Mode="In" />
+          <Parameter Name="game" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="MakeMatchEasy" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="INPUT_TIME" Type="time" Mode="In" />
+          <Parameter Name="INPUT_TOURNEY" Type="int" Mode="In" />
+          <Parameter Name="INPUT_PLAYER1" Type="int" Mode="In" />
+          <Parameter Name="INPUT_PLAYER2" Type="int" Mode="In" />
+          <Parameter Name="INPUT_GAME" Type="int" Mode="In" />
+        </Function>
         <EntityContainer Name="EsportsTrackerModelStoreContainer">
           <EntitySet Name="AttributesTable" EntityType="Self.AttributesTable" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CompetesIn" EntityType="Self.CompetesIn" Schema="dbo" store:Type="Tables" />
@@ -554,6 +618,36 @@ warning 6002: The table/view 'EsportsTracker.dbo.MatchesView' does not have a pr
     [MatchesView].[Loser] AS [Loser], 
     [MatchesView].[GameName] AS [GameName]
     FROM [dbo].[MatchesView] AS [MatchesView]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="MatchMaker" EntityType="Self.MatchMaker" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [MatchMaker].[TimePlayed] AS [TimePlayed], 
+    [MatchMaker].[TournamentID] AS [TournamentID], 
+    [MatchMaker].[Winner] AS [Winner], 
+    [MatchMaker].[Loser] AS [Loser], 
+    [MatchMaker].[GameID] AS [GameID]
+    FROM [dbo].[MatchMaker] AS [MatchMaker]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="TournamentDetails" EntityType="Self.TournamentDetails" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [TournamentDetails].[TournamentID] AS [TournamentID], 
+    [TournamentDetails].[Date] AS [Date], 
+    [TournamentDetails].[Name] AS [Name], 
+    [TournamentDetails].[Organizer] AS [Organizer], 
+    [TournamentDetails].[Location] AS [Location], 
+    [TournamentDetails].[Game] AS [Game]
+    FROM [dbo].[TournamentDetails] AS [TournamentDetails]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="TournamentDetailsExtended" EntityType="Self.TournamentDetailsExtended" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [TournamentDetailsExtended].[TournamentID] AS [TournamentID], 
+    [TournamentDetailsExtended].[Date] AS [Date], 
+    [TournamentDetailsExtended].[Name] AS [Name], 
+    [TournamentDetailsExtended].[Organizer] AS [Organizer], 
+    [TournamentDetailsExtended].[Location] AS [Location], 
+    [TournamentDetailsExtended].[Game] AS [Game], 
+    [TournamentDetailsExtended].[Participant] AS [Participant]
+    FROM [dbo].[TournamentDetailsExtended] AS [TournamentDetailsExtended]</DefiningQuery>
           </EntitySet>
           <AssociationSet Name="FK_CompetesIn_Team" Association="Self.FK_CompetesIn_Team">
             <End Role="Team" EntitySet="Team" />
@@ -774,7 +868,7 @@ warning 6002: The table/view 'EsportsTracker.dbo.MatchesView' does not have a pr
           <Key>
             <PropertyRef Name="TeamID" />
           </Key>
-          <Property Name="TeamName" Type="String" MaxLength="32" FixedLength="false" Unicode="false" />
+          <Property Name="TeamName" Type="String" MaxLength="32" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="NumPlayers" Type="Int32" Nullable="false" />
           <Property Name="TeamID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <NavigationProperty Name="TeamMatches" Relationship="Self.FK_TEAMMATCH_WINNER" FromRole="Team" ToRole="TeamMatch" />
@@ -797,7 +891,7 @@ warning 6002: The table/view 'EsportsTracker.dbo.MatchesView' does not have a pr
             <PropertyRef Name="TournamentID" />
           </Key>
           <Property Name="TournamentDate" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="TournamentName" Type="String" MaxLength="32" FixedLength="false" Unicode="false" />
+          <Property Name="TournamentName" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
           <Property Name="Organizer" Type="String" MaxLength="32" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="TournamentLocation" Type="String" MaxLength="32" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="TournamentID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
@@ -1099,6 +1193,23 @@ warning 6002: The table/view 'EsportsTracker.dbo.MatchesView' does not have a pr
             <End Role="SoloMatch" EntitySet="SoloMatches" />
             <End Role="SoloMatch1" EntitySet="SoloMatches" />
           </AssociationSet>
+          <EntitySet Name="TournamentDetails" EntityType="EsportsTrackerModel.TournamentDetail" />
+          <EntitySet Name="TournamentDetailsExtendeds" EntityType="EsportsTrackerModel.TournamentDetailsExtended" />
+          <FunctionImport Name="MakeMatchEasy">
+            <Parameter Name="INPUT_TIME" Mode="In" Type="Time" />
+            <Parameter Name="INPUT_TOURNEY" Mode="In" Type="Int32" />
+            <Parameter Name="INPUT_PLAYER1" Mode="In" Type="Int32" />
+            <Parameter Name="INPUT_PLAYER2" Mode="In" Type="Int32" />
+            <Parameter Name="INPUT_GAME" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <EntitySet Name="MatchMakers" EntityType="EsportsTrackerModel.MatchMaker" />
+          <FunctionImport Name="insertTournament">
+            <Parameter Name="date" Mode="In" Type="DateTime" />
+            <Parameter Name="name" Mode="In" Type="String" />
+            <Parameter Name="organizer" Mode="In" Type="String" />
+            <Parameter Name="location" Mode="In" Type="String" />
+            <Parameter Name="game" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
         <EntityType Name="MatchesView">
           <Key>
@@ -1137,6 +1248,50 @@ warning 6002: The table/view 'EsportsTracker.dbo.MatchesView' does not have a pr
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="TournamentDetail">
+          <Key>
+            <PropertyRef Name="TournamentID" />
+            <PropertyRef Name="Date" />
+            <PropertyRef Name="Organizer" />
+            <PropertyRef Name="Location" />
+          </Key>
+          <Property Name="TournamentID" Type="Int32" Nullable="false" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Name" Type="String" MaxLength="32" FixedLength="false" Unicode="false" />
+          <Property Name="Organizer" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="false" />
+          <Property Name="Location" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="false" />
+          <Property Name="Game" Type="String" MaxLength="32" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="TournamentDetailsExtended">
+          <Key>
+            <PropertyRef Name="TournamentID" />
+            <PropertyRef Name="Date" />
+            <PropertyRef Name="Organizer" />
+            <PropertyRef Name="Location" />
+            <PropertyRef Name="Participant" />
+          </Key>
+          <Property Name="TournamentID" Type="Int32" Nullable="false" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Name" Type="String" MaxLength="32" FixedLength="false" Unicode="false" />
+          <Property Name="Organizer" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="false" />
+          <Property Name="Location" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="false" />
+          <Property Name="Game" Type="String" MaxLength="32" FixedLength="false" Unicode="false" />
+          <Property Name="Participant" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="MatchMaker">
+          <Key>
+            <PropertyRef Name="TimePlayed" />
+            <PropertyRef Name="TournamentID" />
+            <PropertyRef Name="Winner" />
+            <PropertyRef Name="Loser" />
+            <PropertyRef Name="GameID" />
+          </Key>
+          <Property Name="TimePlayed" Type="Time" Nullable="false" ConcurrencyMode="Fixed" Precision="7" />
+          <Property Name="TournamentID" Type="Int32" Nullable="false" />
+          <Property Name="Winner" Type="Int32" Nullable="false" />
+          <Property Name="Loser" Type="Int32" Nullable="false" />
+          <Property Name="GameID" Type="Int32" Nullable="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1333,6 +1488,44 @@ warning 6002: The table/view 'EsportsTracker.dbo.MatchesView' does not have a pr
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="TournamentDetails">
+            <EntityTypeMapping TypeName="EsportsTrackerModel.TournamentDetail">
+              <MappingFragment StoreEntitySet="TournamentDetails">
+                <ScalarProperty Name="Game" ColumnName="Game" />
+                <ScalarProperty Name="Location" ColumnName="Location" />
+                <ScalarProperty Name="Organizer" ColumnName="Organizer" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="TournamentID" ColumnName="TournamentID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TournamentDetailsExtendeds">
+            <EntityTypeMapping TypeName="EsportsTrackerModel.TournamentDetailsExtended">
+              <MappingFragment StoreEntitySet="TournamentDetailsExtended">
+                <ScalarProperty Name="Participant" ColumnName="Participant" />
+                <ScalarProperty Name="Game" ColumnName="Game" />
+                <ScalarProperty Name="Location" ColumnName="Location" />
+                <ScalarProperty Name="Organizer" ColumnName="Organizer" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="TournamentID" ColumnName="TournamentID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="MakeMatchEasy" FunctionName="EsportsTrackerModel.Store.MakeMatchEasy" />
+          <EntitySetMapping Name="MatchMakers">
+            <EntityTypeMapping TypeName="EsportsTrackerModel.MatchMaker">
+              <MappingFragment StoreEntitySet="MatchMaker">
+                <ScalarProperty Name="GameID" ColumnName="GameID" />
+                <ScalarProperty Name="Loser" ColumnName="Loser" />
+                <ScalarProperty Name="Winner" ColumnName="Winner" />
+                <ScalarProperty Name="TournamentID" ColumnName="TournamentID" />
+                <ScalarProperty Name="TimePlayed" ColumnName="TimePlayed" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="insertTournament" FunctionName="EsportsTrackerModel.Store.insertTournament" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

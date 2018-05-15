@@ -1,4 +1,6 @@
-﻿@model IEnumerable<eSportsTracker.Models.VideoGame>
+﻿@model PagedList.IPagedList<eSportsTracker.Models.VideoGame>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 
 @{
     ViewBag.Title = "Index";
@@ -9,55 +11,73 @@
 <p>
     @if (Session["LoggedIn"] != null)
     {
-    @Html.ActionLink("Create New", "Create") }
+        @Html.ActionLink("Create New", "Create")}
 </p>
 <table class="table">
     <tr>
+        @{if (Session["LoggedIn"] != null)
+            {
+                <th>
+                    GameID
+                </th>
+            }}
         <th>
-            @Html.DisplayNameFor(model => model.GameName)
+            Name
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Released)
+            Release Date
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Genre)
+            Genre
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Developer)
+            Developer
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Publisher)
+            {Publisher
         </th>
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.GameName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Released)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Genre)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Developer)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Publisher)
-        </td>
-        <td>
-            @{ if (Session["LoggedIn"] != null)
-               {
-                    @Html.ActionLink("Edit", "Edit", new { id = item.GameID }) <text>|</text>
-                    @Html.ActionLink("Details", "Details", new { id = item.GameID }) <text>|</text>
-                    @Html.ActionLink("Delete", "Delete", new { id = item.GameID })
-               }
-            }
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            @{if (Session["LoggedIn"] != null)
+                {
+                    <td>
+                        @Html.DisplayFor(modelItem => item.GameID)
+                    </td>
+                }}
+            <td>
+                @Html.DisplayFor(modelItem => item.GameName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Released)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Genre)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Developer)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Publisher)
+            </td>
+            <td>
+                @{ if (Session["LoggedIn"] != null)
+                    {
+                        @Html.ActionLink("Edit", "Edit", new { id = item.GameID }) <text>|</text>
+                        @Html.ActionLink("Details", "Details", new { id = item.GameID }) <text>|</text>
+                        @Html.ActionLink("Delete", "Delete", new { id = item.GameID })
+                    }
+                }
+            </td>
+        </tr>
+    }
 
 </table>
+<br />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("Index",
+    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))

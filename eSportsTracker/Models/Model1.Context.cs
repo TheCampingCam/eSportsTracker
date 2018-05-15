@@ -12,6 +12,8 @@ namespace eSportsTracker.Models
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
+    using System.Data.Entity.Core.Objects;
+    using System.Linq;
     
     public partial class EsportsTrackerEntities1 : DbContext
     {
@@ -39,5 +41,58 @@ namespace eSportsTracker.Models
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<VideoGame> VideoGames { get; set; }
         public virtual DbSet<MatchesView> MatchesViews { get; set; }
+        public virtual DbSet<TournamentDetail> TournamentDetails { get; set; }
+        public virtual DbSet<TournamentDetailsExtended> TournamentDetailsExtendeds { get; set; }
+        public virtual DbSet<MatchMaker> MatchMakers { get; set; }
+    
+        public virtual int MakeMatchEasy(Nullable<System.TimeSpan> iNPUT_TIME, Nullable<int> iNPUT_TOURNEY, Nullable<int> iNPUT_PLAYER1, Nullable<int> iNPUT_PLAYER2, Nullable<int> iNPUT_GAME)
+        {
+            var iNPUT_TIMEParameter = iNPUT_TIME.HasValue ?
+                new ObjectParameter("INPUT_TIME", iNPUT_TIME) :
+                new ObjectParameter("INPUT_TIME", typeof(System.TimeSpan));
+    
+            var iNPUT_TOURNEYParameter = iNPUT_TOURNEY.HasValue ?
+                new ObjectParameter("INPUT_TOURNEY", iNPUT_TOURNEY) :
+                new ObjectParameter("INPUT_TOURNEY", typeof(int));
+    
+            var iNPUT_PLAYER1Parameter = iNPUT_PLAYER1.HasValue ?
+                new ObjectParameter("INPUT_PLAYER1", iNPUT_PLAYER1) :
+                new ObjectParameter("INPUT_PLAYER1", typeof(int));
+    
+            var iNPUT_PLAYER2Parameter = iNPUT_PLAYER2.HasValue ?
+                new ObjectParameter("INPUT_PLAYER2", iNPUT_PLAYER2) :
+                new ObjectParameter("INPUT_PLAYER2", typeof(int));
+    
+            var iNPUT_GAMEParameter = iNPUT_GAME.HasValue ?
+                new ObjectParameter("INPUT_GAME", iNPUT_GAME) :
+                new ObjectParameter("INPUT_GAME", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("MakeMatchEasy", iNPUT_TIMEParameter, iNPUT_TOURNEYParameter, iNPUT_PLAYER1Parameter, iNPUT_PLAYER2Parameter, iNPUT_GAMEParameter);
+        }
+    
+        public virtual int insertTournament(Nullable<System.DateTime> date, string name, string organizer, string location, string game)
+        {
+            var dateParameter = date.HasValue ?
+                new ObjectParameter("date", date) :
+                new ObjectParameter("date", typeof(System.DateTime));
+    
+            var nameParameter = name != null ?
+                new ObjectParameter("name", name) :
+                new ObjectParameter("name", typeof(string));
+    
+            var organizerParameter = organizer != null ?
+                new ObjectParameter("organizer", organizer) :
+                new ObjectParameter("organizer", typeof(string));
+    
+            var locationParameter = location != null ?
+                new ObjectParameter("location", location) :
+                new ObjectParameter("location", typeof(string));
+    
+            var gameParameter = game != null ?
+                new ObjectParameter("game", game) :
+                new ObjectParameter("game", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("insertTournament", dateParameter, nameParameter, organizerParameter, locationParameter, gameParameter);
+        }
     }
 }
