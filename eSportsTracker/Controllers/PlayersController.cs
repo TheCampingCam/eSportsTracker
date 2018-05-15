@@ -100,7 +100,7 @@ namespace eSportsTracker.Controllers
                 }
                 catch (DbUpdateException e)
                 {
-                    @ViewBag.Error = "Could not player";
+                    @ViewBag.Error = "Could not create player";
                     return View();
                 }
                 return RedirectToAction("Index");

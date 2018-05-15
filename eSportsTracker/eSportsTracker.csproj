@@ -176,6 +176,7 @@
     <Compile Include="Controllers\SoloMatchesController.cs" />
     <Compile Include="Controllers\TeamMatchesController.cs" />
     <Compile Include="Controllers\TeamsController.cs" />
+    <Compile Include="Controllers\TournamentDetailsController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Controllers\VideoGamesController.cs" />
     <Compile Include="Global.asax.cs">
@@ -336,6 +337,11 @@
     <Content Include="Views\TeamMatches\Delete.cshtml" />
     <Content Include="Views\SoloMatches\Create.cshtml" />
     <Content Include="Views\SoloMatches\Delete.cshtml" />
+    <Content Include="Views\TournamentDetails\Create.cshtml" />
+    <Content Include="Views\TournamentDetails\Delete.cshtml" />
+    <Content Include="Views\TournamentDetails\Details.cshtml" />
+    <Content Include="Views\TournamentDetails\Edit.cshtml" />
+    <Content Include="Views\TournamentDetails\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

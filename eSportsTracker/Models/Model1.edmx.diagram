@@ -40,7 +40,7 @@
         <EntityTypeShape EntityType="EsportsTrackerModel.MatchesView" Width="1.5" PointX="6.375" PointY="0.75" />
         <AssociationConnector Association="EsportsTrackerModel.FK_SoloMatch_LOSER" />
         <AssociationConnector Association="EsportsTrackerModel.FK_SoloMatch_SoloMatch" />
-        <EntityTypeShape EntityType="EsportsTrackerModel.TournamentDetail" Width="1.5" PointX="8.375" PointY="0.75" />
+        <EntityTypeShape EntityType="EsportsTrackerModel.TournamentDetail" Width="1.5" PointX="8.375" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="EsportsTrackerModel.TournamentDetailsExtended" Width="1.5" PointX="8.375" PointY="3.75" />
         <EntityTypeShape EntityType="EsportsTrackerModel.MatchMaker" Width="1.5" PointX="3.375" PointY="0.625" />
       </Diagram>
