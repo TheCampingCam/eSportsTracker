@@ -168,7 +168,6 @@
     <Compile Include="Controllers\OrganizationsController.cs" />
     <Compile Include="Controllers\PlayersController.cs" />
     <Compile Include="Controllers\TeamsController.cs" />
-    <Compile Include="Controllers\TournamentDetailsController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Controllers\VideoGamesController.cs" />
     <Compile Include="Global.asax.cs">
@@ -225,9 +224,6 @@
     <Compile Include="Models\Tournament.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\TournamentDetails.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\User.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -248,7 +244,6 @@
       <DependentUpon>Model1.edmx</DependentUpon>
       <LastGenOutput>Model1.Context.cs</LastGenOutput>
     </Content>
-    <Content Include="Models\Model1.edmx.sql" />
     <Content Include="Models\Model1.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>Model1.edmx</DependentUpon>
@@ -318,11 +313,6 @@
     <Content Include="Views\Teams\Details.cshtml" />
     <Content Include="Views\Teams\Edit.cshtml" />
     <Content Include="Views\Teams\Index.cshtml" />
-    <Content Include="Views\TournamentDetails\Create.cshtml" />
-    <Content Include="Views\TournamentDetails\Delete.cshtml" />
-    <Content Include="Views\TournamentDetails\Details.cshtml" />
-    <Content Include="Views\TournamentDetails\Edit.cshtml" />
-    <Content Include="Views\TournamentDetails\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

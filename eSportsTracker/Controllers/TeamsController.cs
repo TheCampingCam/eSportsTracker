@@ -53,10 +53,6 @@ namespace eSportsTracker.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "TeamName,NumPlayers,TeamID")] Team team)
         {
-            if (team.NumPlayers <= 0) {
-                @ViewBag.Error = "Invalid number of players";
-                return View();
-            }
             if (ModelState.IsValid)
             {
                 db.Teams.Add(team);
