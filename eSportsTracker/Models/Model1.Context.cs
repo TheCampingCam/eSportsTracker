@@ -94,5 +94,33 @@ namespace eSportsTracker.Models
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("insertTournament", dateParameter, nameParameter, organizerParameter, locationParameter, gameParameter);
         }
+    
+        [DbFunction("EsportsTrackerEntities1", "getStats")]
+        public virtual IQueryable<getStats_Result> getStats(Nullable<int> matchID, string handle)
+        {
+            var matchIDParameter = matchID.HasValue ?
+                new ObjectParameter("matchID", matchID) :
+                new ObjectParameter("matchID", typeof(int));
+    
+            var handleParameter = handle != null ?
+                new ObjectParameter("handle", handle) :
+                new ObjectParameter("handle", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<getStats_Result>("[EsportsTrackerEntities1].[getStats](@matchID, @handle)", matchIDParameter, handleParameter);
+        }
+    
+        [DbFunction("EsportsTrackerEntities1", "getStatsV")]
+        public virtual IQueryable<getStatsV_Result> getStatsV(Nullable<int> matchID, string handle)
+        {
+            var matchIDParameter = matchID.HasValue ?
+                new ObjectParameter("matchID", matchID) :
+                new ObjectParameter("matchID", typeof(int));
+    
+            var handleParameter = handle != null ?
+                new ObjectParameter("handle", handle) :
+                new ObjectParameter("handle", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<getStatsV_Result>("[EsportsTrackerEntities1].[getStatsV](@matchID, @handle)", matchIDParameter, handleParameter);
+        }
     }
 }

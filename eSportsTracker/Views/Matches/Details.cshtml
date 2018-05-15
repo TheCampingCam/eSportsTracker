@@ -17,25 +17,14 @@
         <dd>
             @Html.DisplayFor(model => model.TimePlayed)
         </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.SoloMatch.MatchID)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.SoloMatch.MatchID)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.TeamMatch.MatchID)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.TeamMatch.MatchID)
-        </dd>
-
     </dl>
 </div>
+<tr>
+    @foreach (var v in ViewBag.winnerS) {
+
+
+    }
+</tr>
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.MatchID }) |
     @Html.ActionLink("Back to List", "Index")

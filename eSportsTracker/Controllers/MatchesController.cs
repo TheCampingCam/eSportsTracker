@@ -1,10 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections;
 using System.Data;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
 using eSportsTracker.Models;
@@ -60,6 +61,13 @@ namespace eSportsTracker.Controllers
             {
                 return HttpNotFound();
             }
+            MatchesView mv = db.MatchesViews.Find(id);
+            IQueryable<getStatsV_Result> info = db.getStatsV(id, mv.Winner);
+            ViewBag.winnerN = mv.Winner;
+            ViewBag.winnerS = info;
+            info = db.getStatsV(id, mv.Loser);
+            ViewBag.loserN = mv.Loser;
+            ViewBag.loserS = info;
             return View(match);
         }
 

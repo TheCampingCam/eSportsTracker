@@ -61,7 +61,7 @@
             <td>
                 @Html.DisplayFor(modelItem => item.MatchID)
             </td>
-                    } }
+            } }
             <td>
                 @Html.DisplayFor(modelItem => item.Winner)
             </td>
@@ -81,6 +81,9 @@
                         @Html.ActionLink("Edit", "Edit", new { id = item.MatchID }) <text>|</text>
                         @Html.ActionLink("Details", "Details", new { id = item.MatchID }) <text>|</text>
                         @Html.ActionLink("Delete", "Delete", new { id = item.MatchID })
+                    }
+                    else {
+                        @Html.ActionLink("Details","Details", new { id = item.MatchID })
                     }
 
                 }

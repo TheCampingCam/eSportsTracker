@@ -185,6 +185,12 @@
     <Compile Include="Models\AttributesTable.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\getStatsV_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\getStats_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Match.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>

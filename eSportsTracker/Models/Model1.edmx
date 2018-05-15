@@ -179,9 +179,9 @@ warning 6002: The table/view 'EsportsTracker.dbo.MatchesView' does not have a pr
         <EntityType Name="MatchesView">
           <Key>
             <PropertyRef Name="MatchID" />
-            <PropertyRef Name="Winner" />
-            <PropertyRef Name="Loser" />
-            <PropertyRef Name="GameName" />
+            
+            
+            
           </Key>
           <Property Name="MatchID" Type="int" Nullable="false" />
           <Property Name="TournamentName" Type="varchar" MaxLength="32" />
@@ -210,9 +210,9 @@ warning 6002: The table/view 'EsportsTracker.dbo.TournamentDetails' does not hav
         <EntityType Name="TournamentDetails">
           <Key>
             <PropertyRef Name="TournamentID" />
-            <PropertyRef Name="Date" />
-            <PropertyRef Name="Organizer" />
-            <PropertyRef Name="Location" />
+            
+            
+            
           </Key>
           <Property Name="TournamentID" Type="int" Nullable="false" />
           <Property Name="Date" Type="date" Nullable="false" />
@@ -226,9 +226,9 @@ warning 6002: The table/view 'EsportsTracker.dbo.TournamentDetailsExtended' does
         <EntityType Name="TournamentDetailsExtended">
           <Key>
             <PropertyRef Name="TournamentID" />
-            <PropertyRef Name="Date" />
-            <PropertyRef Name="Organizer" />
-            <PropertyRef Name="Location" />
+            
+            
+            
             <PropertyRef Name="Participant" />
           </Key>
           <Property Name="TournamentID" Type="int" Nullable="false" />
@@ -575,6 +575,36 @@ warning 6002: The table/view 'EsportsTracker.dbo.TournamentDetailsExtended' does
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="getStats" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="matchID" Type="int" Mode="In" />
+          <Parameter Name="handle" Type="varchar" Mode="In" />
+          <ReturnType>
+            <CollectionType>
+              <RowType>
+                <Property Name="Handle" Type="varchar" MaxLength="32" Nullable="false" />
+                <Property Name="MatchID" Type="int" Nullable="false" />
+                <Property Name="Turns Played" Type="nvarchar" MaxLength="32" />
+                <Property Name="Cards Played" Type="nvarchar" MaxLength="32" />
+                <Property Name="APM" Type="nvarchar" MaxLength="32" />
+                <Property Name="K/D" Type="nvarchar" MaxLength="32" />
+                <Property Name="Kills" Type="nvarchar" MaxLength="32" />
+                <Property Name="Deaths" Type="nvarchar" MaxLength="32" />
+              </RowType>
+            </CollectionType>
+          </ReturnType>
+        </Function>
+        <Function Name="getStatsV" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="matchID" Type="int" Mode="In" />
+          <Parameter Name="handle" Type="varchar" Mode="In" />
+          <ReturnType>
+            <CollectionType>
+              <RowType>
+                <Property Name="Name" Type="varchar" MaxLength="20" />
+                <Property Name="ValueOf" Type="nvarchar" MaxLength="32" Nullable="false" />
+              </RowType>
+            </CollectionType>
+          </ReturnType>
+        </Function>
         <Function Name="insertTournament" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="date" Type="date" Mode="In" />
           <Parameter Name="name" Type="varchar" Mode="In" />
@@ -1210,13 +1240,18 @@ warning 6002: The table/view 'EsportsTracker.dbo.TournamentDetailsExtended' does
             <Parameter Name="location" Mode="In" Type="String" />
             <Parameter Name="game" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="getStats" IsComposable="true" ReturnType="Collection(EsportsTrackerModel.getStats_Result)">
+            <Parameter Name="matchID" Mode="In" Type="Int32" />
+            <Parameter Name="handle" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="getStatsV" IsComposable="true" ReturnType="Collection(EsportsTrackerModel.getStatsV_Result)">
+            <Parameter Name="matchID" Mode="In" Type="Int32" />
+            <Parameter Name="handle" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
         <EntityType Name="MatchesView">
           <Key>
             <PropertyRef Name="MatchID" />
-            <PropertyRef Name="Winner" />
-            <PropertyRef Name="Loser" />
-            <PropertyRef Name="GameName" />
           </Key>
           <Property Name="MatchID" Type="Int32" Nullable="false" />
           <Property Name="TournamentName" Type="String" MaxLength="32" FixedLength="false" Unicode="false" />
@@ -1251,9 +1286,6 @@ warning 6002: The table/view 'EsportsTracker.dbo.TournamentDetailsExtended' does
         <EntityType Name="TournamentDetail">
           <Key>
             <PropertyRef Name="TournamentID" />
-            <PropertyRef Name="Date" />
-            <PropertyRef Name="Organizer" />
-            <PropertyRef Name="Location" />
           </Key>
           <Property Name="TournamentID" Type="Int32" Nullable="false" />
           <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
@@ -1265,9 +1297,6 @@ warning 6002: The table/view 'EsportsTracker.dbo.TournamentDetailsExtended' does
         <EntityType Name="TournamentDetailsExtended">
           <Key>
             <PropertyRef Name="TournamentID" />
-            <PropertyRef Name="Date" />
-            <PropertyRef Name="Organizer" />
-            <PropertyRef Name="Location" />
             <PropertyRef Name="Participant" />
           </Key>
           <Property Name="TournamentID" Type="Int32" Nullable="false" />
@@ -1292,6 +1321,20 @@ warning 6002: The table/view 'EsportsTracker.dbo.TournamentDetailsExtended' does
           <Property Name="Loser" Type="Int32" Nullable="false" />
           <Property Name="GameID" Type="Int32" Nullable="false" />
         </EntityType>
+        <ComplexType Name="getStats_Result">
+          <Property Type="String" Name="Handle" Nullable="false" MaxLength="32" />
+          <Property Type="Int32" Name="MatchID" Nullable="false" />
+          <Property Type="String" Name="Turns_Played" Nullable="true" MaxLength="32" />
+          <Property Type="String" Name="Cards_Played" Nullable="true" MaxLength="32" />
+          <Property Type="String" Name="APM" Nullable="true" MaxLength="32" />
+          <Property Type="String" Name="K_D" Nullable="true" MaxLength="32" />
+          <Property Type="String" Name="Kills" Nullable="true" MaxLength="32" />
+          <Property Type="String" Name="Deaths" Nullable="true" MaxLength="32" />
+        </ComplexType>
+        <ComplexType Name="getStatsV_Result">
+          <Property Type="String" Name="Name" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="ValueOf" Nullable="false" MaxLength="32" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1526,6 +1569,28 @@ warning 6002: The table/view 'EsportsTracker.dbo.TournamentDetailsExtended' does
             </EntityTypeMapping>
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="insertTournament" FunctionName="EsportsTrackerModel.Store.insertTournament" />
+          <FunctionImportMapping FunctionImportName="getStats" FunctionName="EsportsTrackerModel.Store.getStats">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="EsportsTrackerModel.getStats_Result">
+                <ScalarProperty Name="Handle" ColumnName="Handle" />
+                <ScalarProperty Name="MatchID" ColumnName="MatchID" />
+                <ScalarProperty Name="Turns_Played" ColumnName="Turns Played" />
+                <ScalarProperty Name="Cards_Played" ColumnName="Cards Played" />
+                <ScalarProperty Name="APM" ColumnName="APM" />
+                <ScalarProperty Name="K_D" ColumnName="K/D" />
+                <ScalarProperty Name="Kills" ColumnName="Kills" />
+                <ScalarProperty Name="Deaths" ColumnName="Deaths" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="getStatsV" FunctionName="EsportsTrackerModel.Store.getStatsV">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="EsportsTrackerModel.getStatsV_Result">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ValueOf" ColumnName="ValueOf" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
