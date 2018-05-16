@@ -68,14 +68,13 @@ namespace eSportsTracker.Controllers
             ViewBag.loserN = mv.Loser;
             IQueryable<getStatsPair_Result> info = db.getStatsPair(id);
             int m = info.Count();
-            for (int i = 0; i < m; i++) {
-                getStatsPair_Result stat = info.ElementAt(i);
+            foreach (var stat in info) {
                 if (stat.Player.Equals(mv.Winner))
                 {
-                    ViewBag.winnerS += stat.Name + ": " + stat.ValueOf + "\n";
+                    ViewBag.winnerS += stat.Name + ": " + stat.ValueOf+"\n";
                 }
                 else {
-                    ViewBag.loserS += stat.Name + ": " + stat.ValueOf + "\n";
+                    ViewBag.loserS += stat.Name + ": " + stat.ValueOf+"\n";
                 }
             }
             return View(match);

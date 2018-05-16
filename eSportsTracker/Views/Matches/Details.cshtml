@@ -7,7 +7,6 @@
 <h2>Details</h2>
 
 <div>
-    <h4>Match</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -22,16 +21,14 @@
 <p>
     @ViewBag.winnerN
 </p>
-<p>
+<tr>
     @ViewBag.winnerS
-</p>
+</tr>
 <p>
     @ViewBag.loserN
 </p>
-<p>
     @ViewBag.loserS
-</p>
+</>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.MatchID }) |
     @Html.ActionLink("Back to List", "Index")
 </p>
