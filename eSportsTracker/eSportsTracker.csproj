@@ -176,12 +176,22 @@
     <Compile Include="Controllers\SoloMatchesController.cs" />
     <Compile Include="Controllers\TeamMatchesController.cs" />
     <Compile Include="Controllers\TeamsController.cs" />
+    <Compile Include="Controllers\TournamentDetailsController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Controllers\VideoGamesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AttributesTable.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\getStatsPair_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\getStatsV1_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\getStatsVert_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\getStatsV_Result.cs">
@@ -348,6 +358,11 @@
     <Content Include="Views\TeamMatches\Delete.cshtml" />
     <Content Include="Views\SoloMatches\Create.cshtml" />
     <Content Include="Views\SoloMatches\Delete.cshtml" />
+    <Content Include="Views\TournamentDetails\Create.cshtml" />
+    <Content Include="Views\TournamentDetails\Delete.cshtml" />
+    <Content Include="Views\TournamentDetails\Details.cshtml" />
+    <Content Include="Views\TournamentDetails\Edit.cshtml" />
+    <Content Include="Views\TournamentDetails\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

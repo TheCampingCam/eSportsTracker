@@ -154,5 +154,35 @@ namespace eSportsTracker.Models
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("DeleteMatches", matchIDParameter);
         }
+    
+        [DbFunction("EsportsTrackerEntities1", "getStatsV1")]
+        public virtual IQueryable<getStatsV1_Result> getStatsV1(Nullable<int> matchID)
+        {
+            var matchIDParameter = matchID.HasValue ?
+                new ObjectParameter("matchID", matchID) :
+                new ObjectParameter("matchID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<getStatsV1_Result>("[EsportsTrackerEntities1].[getStatsV1](@matchID)", matchIDParameter);
+        }
+    
+        [DbFunction("EsportsTrackerEntities1", "getStatsVert")]
+        public virtual IQueryable<getStatsVert_Result> getStatsVert(Nullable<int> matchID)
+        {
+            var matchIDParameter = matchID.HasValue ?
+                new ObjectParameter("matchID", matchID) :
+                new ObjectParameter("matchID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<getStatsVert_Result>("[EsportsTrackerEntities1].[getStatsVert](@matchID)", matchIDParameter);
+        }
+    
+        [DbFunction("EsportsTrackerEntities1", "getStatsPair")]
+        public virtual IQueryable<getStatsPair_Result> getStatsPair(Nullable<int> matchID)
+        {
+            var matchIDParameter = matchID.HasValue ?
+                new ObjectParameter("matchID", matchID) :
+                new ObjectParameter("matchID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<getStatsPair_Result>("[EsportsTrackerEntities1].[getStatsPair](@matchID)", matchIDParameter);
+        }
     }
 }
