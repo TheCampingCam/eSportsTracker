@@ -19,12 +19,18 @@
         </dd>
     </dl>
 </div>
-<tr>
-    @foreach (var v in ViewBag.winnerS) {
-
-
-    }
-</tr>
+<p>
+    @ViewBag.winnerN
+</p>
+<p>
+    @ViewBag.winnerS
+</p>
+<p>
+    @ViewBag.loserN
+</p>
+<p>
+    @ViewBag.loserS
+</p>
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.MatchID }) |
     @Html.ActionLink("Back to List", "Index")

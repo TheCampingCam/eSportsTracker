@@ -12,13 +12,11 @@ namespace eSportsTracker.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class TeamMatch
+    public partial class statTable
     {
+        public string Handle { get; set; }
         public int MatchID { get; set; }
-        public Nullable<int> Winner { get; set; }
-        public Nullable<int> Loser { get; set; }
-    
-        public virtual Match Match { get; set; }
-        public virtual Team Team { get; set; }
+        public string Name { get; set; }
+        public string ValueOf { get; set; }
     }
 }
