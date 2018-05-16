@@ -68,7 +68,7 @@ namespace eSportsTracker.Controllers
             {
                 return HttpNotFound();
             }
-            return RedirectToAction("Index", "Matches", new { area = "" });
+            return View(teamMatch);
         }
 
         // POST: TeamMatches/Delete/5
