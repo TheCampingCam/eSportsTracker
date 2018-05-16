@@ -172,8 +172,7 @@ namespace eSportsTracker.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Match match = db.Matches.Find(id);
-            db.Matches.Remove(match);
+            db.DeleteMatches(id);
             try
             {
                 db.SaveChanges();

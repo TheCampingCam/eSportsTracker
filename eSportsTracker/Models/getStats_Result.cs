@@ -10,15 +10,16 @@
 namespace eSportsTracker.Models
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class TeamMatch
+    public partial class getStats_Result
     {
+        public string Handle { get; set; }
         public int MatchID { get; set; }
-        public Nullable<int> Winner { get; set; }
-        public Nullable<int> Loser { get; set; }
-    
-        public virtual Match Match { get; set; }
-        public virtual Team Team { get; set; }
+        public string Turns_Played { get; set; }
+        public string Cards_Played { get; set; }
+        public string APM { get; set; }
+        public string K_D { get; set; }
+        public string Kills { get; set; }
+        public string Deaths { get; set; }
     }
 }

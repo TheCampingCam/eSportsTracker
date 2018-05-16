@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -78,9 +79,16 @@ namespace eSportsTracker.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            SoloMatch soloMatch = db.SoloMatches.Find(id);
-            db.SoloMatches.Remove(soloMatch);
-            db.SaveChanges();
+            db.DeleteMatches(id);
+            try
+            {
+                db.SaveChanges();
+            }
+            catch (DbUpdateException e)
+            {
+                @ViewBag.Error = "Could not remove match record";
+                return View();
+            }
             return RedirectToAction("Index");
         }
 
