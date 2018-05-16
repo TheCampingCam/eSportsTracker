@@ -48,7 +48,7 @@ namespace eSportsTracker.Controllers
             ViewBag.Loser = new SelectList(db.Teams, "TeamID", "TeamName");
             ViewBag.TournamentID = new SelectList(db.Tournaments, "TournamentID", "TournamentName");
             ViewBag.GameID = new SelectList(db.VideoGames, "GameID", "GameName");
-            return View(teamMatch);
+            return RedirectToAction("Index", "Matches", new { area = "" });
         }
 
         // GET: TeamMatches/Delete/5
@@ -68,7 +68,7 @@ namespace eSportsTracker.Controllers
             {
                 return HttpNotFound();
             }
-            return View(teamMatch);
+            return RedirectToAction("Index", "Matches", new { area = "" });
         }
 
         // POST: TeamMatches/Delete/5
@@ -86,7 +86,7 @@ namespace eSportsTracker.Controllers
                 @ViewBag.Error = "Could not remove match record";
                 return View();
             }
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "Matches", new { area = "" });
         }
 
         protected override void Dispose(bool disposing)
