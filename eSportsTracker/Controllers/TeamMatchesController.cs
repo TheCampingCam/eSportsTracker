@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -19,8 +20,10 @@ namespace eSportsTracker.Controllers
         {
             if (Session["LoggedIn"] != null)
             {
-                ViewBag.MatchID = new SelectList(db.Matches, "MatchID", "MatchID");
                 ViewBag.Winner = new SelectList(db.Teams, "TeamID", "TeamName");
+                ViewBag.Loser = new SelectList(db.Teams, "TeamID", "TeamName");
+                ViewBag.TournamentID = new SelectList(db.Tournaments, "TournamentID", "TournamentName");
+                ViewBag.GameID = new SelectList(db.VideoGames, "GameID", "GameName");
                 return View();
             } else
             {
@@ -33,17 +36,18 @@ namespace eSportsTracker.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "MatchID,Winner")] TeamMatch teamMatch)
+        public ActionResult Create([Bind(Include = "TimePlayed,Winner,Loser,TournamentID,GameID")] MultiMatchMaker teamMatch)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid || teamMatch.TournamentID == 0)
             {
-                db.TeamMatches.Add(teamMatch);
+                db.MakeTeamMatchEasy(teamMatch.TimePlayed, teamMatch.TournamentID, teamMatch.Winner, teamMatch.Loser, teamMatch.GameID);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-
-            ViewBag.MatchID = new SelectList(db.Matches, "MatchID", "MatchID", teamMatch.MatchID);
-            ViewBag.Winner = new SelectList(db.Teams, "TeamID", "TeamName", teamMatch.Winner);
+            ViewBag.Winner = new SelectList(db.Teams, "TeamID", "TeamName");
+            ViewBag.Loser = new SelectList(db.Teams, "TeamID", "TeamName");
+            ViewBag.TournamentID = new SelectList(db.Tournaments, "TournamentID", "TournamentName");
+            ViewBag.GameID = new SelectList(db.VideoGames, "GameID", "GameName");
             return View(teamMatch);
         }
 
@@ -72,9 +76,16 @@ namespace eSportsTracker.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            TeamMatch teamMatch = db.TeamMatches.Find(id);
-            db.TeamMatches.Remove(teamMatch);
-            db.SaveChanges();
+            db.DeleteMatches(id);
+            try
+            {
+                db.SaveChanges();
+            }
+            catch (DbUpdateException e)
+            {
+                @ViewBag.Error = "Could not remove match record";
+                return View();
+            }
             return RedirectToAction("Index");
         }
 
