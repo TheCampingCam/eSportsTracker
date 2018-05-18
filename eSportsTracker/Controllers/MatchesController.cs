@@ -50,7 +50,7 @@ namespace eSportsTracker.Controllers
         }
 
         // GET: Matches/Details/5
-        public ActionResult Details(int? id)
+        public ActionResult Details(int? id,String nameStringW,String valueStringW,String nameStringL,String valueStringL)
         {
             if (id == null)
             {
@@ -62,6 +62,28 @@ namespace eSportsTracker.Controllers
                 return HttpNotFound();
             }
             MatchesView mv = db.MatchesViews.Find(id);
+            if (nameStringW != null && valueStringW != null) {
+                db.AddStatistic(id, mv.Winner, nameStringW, valueStringW);
+                try
+                {
+                    db.SaveChanges();
+                }
+                catch (DbUpdateException e) {
+                    ViewBag.error = "could not add statistic";
+                }
+            }
+            if (nameStringL != null && valueStringL != null)
+            {
+                db.AddStatistic(id, mv.Loser, nameStringL, valueStringL);
+                try
+                {
+                    db.SaveChanges();
+                }
+                catch (DbUpdateException e)
+                {
+                    ViewBag.error = "could not add statistic";
+                }
+            }
             ViewBag.time = match.TimePlayed.ToString();
             ViewBag.winnerN = mv.Winner;
             ViewBag.loserN = mv.Loser;

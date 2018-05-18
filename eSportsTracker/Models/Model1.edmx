@@ -606,6 +606,12 @@ warning 6002: The table/view 'EsportsTracker.dbo.TournamentDetailsExtended' does
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="AddStatistic" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="matchID" Type="int" Mode="In" />
+          <Parameter Name="playerName" Type="varchar" Mode="In" />
+          <Parameter Name="statName" Type="varchar" Mode="In" />
+          <Parameter Name="statValue" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="DeleteMatches" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="MatchID" Type="int" Mode="In" />
         </Function>
@@ -634,7 +640,7 @@ warning 6002: The table/view 'EsportsTracker.dbo.TournamentDetailsExtended' does
               <RowType>
                 <Property Name="Player" Type="varchar" MaxLength="32" Nullable="false" />
                 <Property Name="Name" Type="varchar" MaxLength="20" />
-                <Property Name="ValueOf" Type="nvarchar" MaxLength="32" />
+                <Property Name="ValueOf" Type="nvarchar" MaxLength="32" Nullable="false" />
               </RowType>
             </CollectionType>
           </ReturnType>
@@ -1325,7 +1331,13 @@ warning 6002: The table/view 'EsportsTracker.dbo.TournamentDetailsExtended' does
           <Parameter Name="matchID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="getStatsPair" IsComposable="true" ReturnType="Collection(EsportsTrackerModel.getStatsPair_Result)">
+          <Parameter Name="matchID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="AddStatistic">
             <Parameter Name="matchID" Mode="In" Type="Int32" />
+            <Parameter Name="playerName" Mode="In" Type="String" />
+            <Parameter Name="statName" Mode="In" Type="String" />
+            <Parameter Name="statValue" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
         <EntityType Name="MatchesView">
@@ -1735,6 +1747,7 @@ warning 6002: The table/view 'EsportsTracker.dbo.TournamentDetailsExtended' does
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="AddStatistic" FunctionName="EsportsTrackerModel.Store.AddStatistic" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

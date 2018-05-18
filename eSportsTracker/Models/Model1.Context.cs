@@ -184,5 +184,26 @@ namespace eSportsTracker.Models
     
             return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<getStatsPair_Result>("[EsportsTrackerEntities1].[getStatsPair](@matchID)", matchIDParameter);
         }
+    
+        public virtual int AddStatistic(Nullable<int> matchID, string playerName, string statName, string statValue)
+        {
+            var matchIDParameter = matchID.HasValue ?
+                new ObjectParameter("matchID", matchID) :
+                new ObjectParameter("matchID", typeof(int));
+    
+            var playerNameParameter = playerName != null ?
+                new ObjectParameter("playerName", playerName) :
+                new ObjectParameter("playerName", typeof(string));
+    
+            var statNameParameter = statName != null ?
+                new ObjectParameter("statName", statName) :
+                new ObjectParameter("statName", typeof(string));
+    
+            var statValueParameter = statValue != null ?
+                new ObjectParameter("statValue", statValue) :
+                new ObjectParameter("statValue", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AddStatistic", matchIDParameter, playerNameParameter, statNameParameter, statValueParameter);
+        }
     }
 }
