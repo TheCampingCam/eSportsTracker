@@ -47,6 +47,9 @@ namespace eSportsTracker.Controllers
                 case "name_desc":
                     players = players.OrderByDescending(s => s.Handle);
                     break;
+                case "wins":
+                    players = players.OrderByDescending(s => s.Wins);
+                    break;
                 default:
                     players = players.OrderBy(s => s.PlayerID);
                     break;
