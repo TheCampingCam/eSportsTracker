@@ -45,7 +45,11 @@ namespace eSportsTracker.Controllers
         [HttpPost]
         public ActionResult Import(HttpPostedFileBase file)
         {
-            
+            if (Session["LoggedIn"] == null)
+            {
+                ViewBag.Error = "Cannot Import if not Logged In";
+                return View();
+            }
             try {
                 DataSet ds = new DataSet();
                 if (Request.Files["file"].ContentLength > 0)
