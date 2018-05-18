@@ -23,7 +23,7 @@ namespace eSportsTracker.Controllers
             int pageSize = 10;
             int pageNumber = (page ?? 1);
 
-            var teams = from m in db.Teams
+            var teams = from m in db.TeamsWithWins
                         orderby m.TeamName
                         select m;
 

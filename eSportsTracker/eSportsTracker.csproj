@@ -276,6 +276,9 @@
     <Compile Include="Models\TeamMatch.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\TeamsWithWin.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Tournament.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>

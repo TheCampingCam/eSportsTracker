@@ -48,6 +48,7 @@ namespace eSportsTracker.Models
         public virtual DbSet<statTable> statTables { get; set; }
         public virtual DbSet<PlayerWithWin> PlayerWithWins { get; set; }
         public virtual DbSet<PlayersInGame> PlayersInGames { get; set; }
+        public virtual DbSet<TeamsWithWin> TeamsWithWins { get; set; }
     
         public virtual int MakeMatchEasy(Nullable<System.TimeSpan> iNPUT_TIME, Nullable<int> iNPUT_TOURNEY, Nullable<int> iNPUT_PLAYER1, Nullable<int> iNPUT_PLAYER2, Nullable<int> iNPUT_GAME)
         {
