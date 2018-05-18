@@ -382,16 +382,7 @@
     <Content Include="Views\TournamentDetails\Edit.cshtml" />
     <Content Include="Views\TournamentDetails\Index.cshtml" />
     <Content Include="Views\Home\Import.cshtml" />
-    <Content Include="Web.config">
-      <SubType>Designer</SubType>
-    </Content>
     <Content Include="Views\Players\PlayersByGame.cshtml" />
-    <None Include="Web.Debug.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </None>
-    <None Include="Web.Release.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
