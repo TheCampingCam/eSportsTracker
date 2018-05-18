@@ -224,6 +224,16 @@ warning 6002: The table/view 'EsportsTracker.dbo.MultiMatchMaker' does not have 
           <Property Name="GameID" Type="int" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
+warning 6002: The table/view 'EsportsTracker.dbo.PlayersInGame' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="PlayersInGame">
+          <Key>
+            <PropertyRef Name="Winner" />
+            <PropertyRef Name="GameName" />
+          </Key>
+          <Property Name="Winner" Type="varchar" MaxLength="32" Nullable="false" />
+          <Property Name="GameName" Type="varchar" MaxLength="32" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
 warning 6002: The table/view 'EsportsTracker.dbo.PlayerWithWins' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="PlayerWithWins">
           <Key>
@@ -250,6 +260,20 @@ warning 6002: The table/view 'EsportsTracker.dbo.statTable' does not have a prim
           <Property Name="MatchID" Type="int" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="20" />
           <Property Name="ValueOf" Type="nvarchar" MaxLength="32" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'EsportsTracker.dbo.TeamsWithWins' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="TeamsWithWins">
+          <Key>
+            <PropertyRef Name="TeamName" />
+            <PropertyRef Name="NumPlayers" />
+            <PropertyRef Name="TeamID" />
+          </Key>
+          <Property Name="TeamName" Type="varchar" MaxLength="32" Nullable="false" />
+          <Property Name="NumPlayers" Type="int" Nullable="false" />
+          <Property Name="TeamID" Type="int" Nullable="false" />
+          <Property Name="Wins" Type="int" />
+          <Property Name="GamesPlayed" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'EsportsTracker.dbo.TournamentDetails' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -723,6 +747,12 @@ warning 6002: The table/view 'EsportsTracker.dbo.TournamentDetailsExtended' does
     [MultiMatchMaker].[GameID] AS [GameID]
     FROM [dbo].[MultiMatchMaker] AS [MultiMatchMaker]</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="PlayersInGame" EntityType="Self.PlayersInGame" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [PlayersInGame].[Winner] AS [Winner], 
+    [PlayersInGame].[GameName] AS [GameName]
+    FROM [dbo].[PlayersInGame] AS [PlayersInGame]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="PlayerWithWins" EntityType="Self.PlayerWithWins" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [PlayerWithWins].[Handle] AS [Handle], 
@@ -741,6 +771,15 @@ warning 6002: The table/view 'EsportsTracker.dbo.TournamentDetailsExtended' does
     [statTable].[Name] AS [Name], 
     [statTable].[ValueOf] AS [ValueOf]
     FROM [dbo].[statTable] AS [statTable]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="TeamsWithWins" EntityType="Self.TeamsWithWins" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [TeamsWithWins].[TeamName] AS [TeamName], 
+    [TeamsWithWins].[NumPlayers] AS [NumPlayers], 
+    [TeamsWithWins].[TeamID] AS [TeamID], 
+    [TeamsWithWins].[Wins] AS [Wins], 
+    [TeamsWithWins].[GamesPlayed] AS [GamesPlayed]
+    FROM [dbo].[TeamsWithWins] AS [TeamsWithWins]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="TournamentDetails" EntityType="Self.TournamentDetails" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -1354,6 +1393,8 @@ warning 6002: The table/view 'EsportsTracker.dbo.TournamentDetailsExtended' does
           <Parameter Name="matchID" Mode="In" Type="Int32" />
           </FunctionImport>
           <EntitySet Name="PlayerWithWins" EntityType="EsportsTrackerModel.PlayerWithWin" />
+          <EntitySet Name="PlayersInGames" EntityType="EsportsTrackerModel.PlayersInGame" />
+          <EntitySet Name="TeamsWithWins" EntityType="EsportsTrackerModel.TeamsWithWin" />
         </EntityContainer>
         <EntityType Name="MatchesView">
           <Key>
@@ -1491,6 +1532,26 @@ warning 6002: The table/view 'EsportsTracker.dbo.TournamentDetailsExtended' does
           <Property Name="LName" Type="String" MaxLength="32" FixedLength="false" Unicode="false" />
           <Property Name="FName" Type="String" MaxLength="32" FixedLength="false" Unicode="false" />
           <Property Name="PlayerID" Type="Int32" Nullable="false" />
+          <Property Name="Wins" Type="Int32" />
+          <Property Name="GamesPlayed" Type="Int32" />
+        </EntityType>
+        <EntityType Name="PlayersInGame">
+          <Key>
+            <PropertyRef Name="Winner" />
+            <PropertyRef Name="GameName" />
+          </Key>
+          <Property Name="Winner" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="false" />
+          <Property Name="GameName" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="TeamsWithWin">
+          <Key>
+            <PropertyRef Name="TeamName" />
+            <PropertyRef Name="NumPlayers" />
+            <PropertyRef Name="TeamID" />
+          </Key>
+          <Property Name="TeamName" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="false" />
+          <Property Name="NumPlayers" Type="Int32" Nullable="false" />
+          <Property Name="TeamID" Type="Int32" Nullable="false" />
           <Property Name="Wins" Type="Int32" />
           <Property Name="GamesPlayed" Type="Int32" />
         </EntityType>
@@ -1785,6 +1846,25 @@ warning 6002: The table/view 'EsportsTracker.dbo.TournamentDetailsExtended' does
                 <ScalarProperty Name="LName" ColumnName="LName" />
                 <ScalarProperty Name="DOB" ColumnName="DOB" />
                 <ScalarProperty Name="Handle" ColumnName="Handle" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PlayersInGames">
+            <EntityTypeMapping TypeName="EsportsTrackerModel.PlayersInGame">
+              <MappingFragment StoreEntitySet="PlayersInGame">
+                <ScalarProperty Name="GameName" ColumnName="GameName" />
+                <ScalarProperty Name="Winner" ColumnName="Winner" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TeamsWithWins">
+            <EntityTypeMapping TypeName="EsportsTrackerModel.TeamsWithWin">
+              <MappingFragment StoreEntitySet="TeamsWithWins">
+                <ScalarProperty Name="GamesPlayed" ColumnName="GamesPlayed" />
+                <ScalarProperty Name="Wins" ColumnName="Wins" />
+                <ScalarProperty Name="TeamID" ColumnName="TeamID" />
+                <ScalarProperty Name="NumPlayers" ColumnName="NumPlayers" />
+                <ScalarProperty Name="TeamName" ColumnName="TeamName" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
