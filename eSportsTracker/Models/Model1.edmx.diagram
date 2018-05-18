@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="bbe0acc635eb4f1db2f85397ff64f4a2" Name="Diagram1">
+      <Diagram DiagramId="bbe0acc635eb4f1db2f85397ff64f4a2" Name="Diagram1" ZoomLevel="86">
         <EntityTypeShape EntityType="EsportsTrackerModel.AttributesTable" Width="1.5" PointX="0.75" PointY="13.375" IsExpanded="true" />
         <EntityTypeShape EntityType="EsportsTrackerModel.Match" Width="1.5" PointX="0.75" PointY="8.875" IsExpanded="true" />
         <EntityTypeShape EntityType="EsportsTrackerModel.MatchAttribute" Width="1.5" PointX="3" PointY="9.125" IsExpanded="true" />

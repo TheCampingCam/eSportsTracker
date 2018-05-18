@@ -62,22 +62,12 @@ namespace eSportsTracker.Controllers
                 return HttpNotFound();
             }
             MatchesView mv = db.MatchesViews.Find(id);
-            ViewBag.winnerS = "";
-            ViewBag.loserS = "";
+            ViewBag.time = match.TimePlayed.ToString();
             ViewBag.winnerN = mv.Winner;
             ViewBag.loserN = mv.Loser;
             IQueryable<getStatsPair_Result> info = db.getStatsPair(id);
-            int m = info.Count();
-            foreach (var stat in info) {
-                if (stat.Player.Equals(mv.Winner))
-                {
-                    ViewBag.winnerS += stat.Name + ": " + stat.ValueOf+"\n";
-                }
-                else {
-                    ViewBag.loserS += stat.Name + ": " + stat.ValueOf+"\n";
-                }
-            }
-            return View(match);
+            
+            return View(info);
         }
 
         // GET: Matches/Create

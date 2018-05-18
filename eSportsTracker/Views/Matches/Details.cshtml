@@ -1,4 +1,4 @@
-﻿@model eSportsTracker.Models.Match
+﻿@model IQueryable<eSportsTracker.Models.getStatsPair_Result>
 
 @{
     ViewBag.Title = "Details";
@@ -7,28 +7,52 @@
 <h2>Details</h2>
 
 <div>
-    <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.TimePlayed)
+            Match time:
         </dt>
-
         <dd>
-            @Html.DisplayFor(model => model.TimePlayed)
+            @ViewBag.time
         </dd>
     </dl>
 </div>
-<p>
-    @ViewBag.winnerN
-</p>
-<tr>
-    @ViewBag.winnerS
-</tr>
-<p>
-    @ViewBag.loserN
-</p>
-    @ViewBag.loserS
-</>
+<div>
+    <dl class="dl-horizontal">
+        <dt>
+            Winner:
+        </dt>
+        <dd>
+            @ViewBag.winnerN
+        </dd>
+    </dl>
+    @foreach (var m in Model) {
+        if (m.Player.Equals(ViewBag.winnerN)) {
+            <p>
+                @m.Name <text>: </text> @m.ValueOf
+            </p>
+        }
+    }
+</div>
+<div>
+    <dl class="dl-horizontal">
+        <dt>
+            Loser:
+        </dt>
+        <dd>
+            @ViewBag.loserN
+        </dd>
+    </dl>
+    @foreach (var m in Model)
+    {
+        if (m.Player.Equals(ViewBag.loserN))
+        {
+            <p>
+                @m.Name <text>: </text> @m.ValueOf
+            </p>
+        }
+    }
+</div>
+
 <p>
     @Html.ActionLink("Back to List", "Index")
 </p>
