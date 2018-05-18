@@ -167,7 +167,7 @@ namespace eSportsTracker.Controllers
                 }
             } catch (Exception e)
             {
-                ViewBag.Error = "Import Was not Successful";
+                ViewBag.Error = "Import Was not Successful " + e.Message;
                 // do nothing rn :(
             }
 
