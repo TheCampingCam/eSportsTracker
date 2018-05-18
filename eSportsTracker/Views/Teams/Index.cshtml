@@ -1,4 +1,4 @@
-﻿@model PagedList.IPagedList<eSportsTracker.Models.Team>
+﻿@model PagedList.IPagedList<eSportsTracker.Models.TeamsWithWin>
 @using PagedList.Mvc;
 <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 @{
@@ -26,36 +26,47 @@
         <th>
             Count of Players
         </th>
-        <th></th>
+        <th>
+            Wins
+        </th>
+        <th>
+            Games Played
+        </th>
     </tr>
 
     @foreach (var item in Model)
     {
-        <tr>
-            @{if (Session["LoggedIn"] != null)
+    <tr>
+        @{if (Session["LoggedIn"] != null)
+            {
+                <td>
+                    @Html.DisplayFor(modelItem => item.TeamID)
+                </td>
+            }}
+        <td>
+            @Html.DisplayFor(modelItem => item.TeamName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NumPlayers)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Wins)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.GamesPlayed)
+        </td>
+        <td>
+            @{
+                if (Session["LoggedIn"] != null)
                 {
-                    <td>
-                        @Html.DisplayFor(modelItem => item.TeamID)
-                    </td>
-                }}
-            <td>
-                @Html.DisplayFor(modelItem => item.TeamName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NumPlayers)
-            </td>
-            <td>
-                @{
-                    if (Session["LoggedIn"] != null)
-                    {
-                        @Html.ActionLink("Edit", "Edit", new { id = item.TeamID }) <text>|</text>
-                        @Html.ActionLink("Details", "Details", new { id = item.TeamID }) <text>|</text>
-                        @Html.ActionLink("Delete", "Delete", new { id = item.TeamID })
-                    }
-
+                    @Html.ActionLink("Edit", "Edit", new { id = item.TeamID }) <text>|</text>
+                    @Html.ActionLink("Details", "Details", new { id = item.TeamID }) <text>|</text>
+                    @Html.ActionLink("Delete", "Delete", new { id = item.TeamID })
                 }
-            </td>
-        </tr>
+
+            }
+        </td>
+    </tr>
     }
 
 </table>

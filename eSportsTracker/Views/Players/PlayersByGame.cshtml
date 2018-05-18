@@ -1,0 +1,73 @@
+﻿@model PagedList.IPagedList<eSportsTracker.Models.PlayersInGame>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+@{
+    ViewBag.Title = "Players";
+}
+
+<h2>Players</h2>
+
+<p>
+    @if (Session["LoggedIn"] != null)
+    {
+        @Html.ActionLink("Create New", "Create")}
+</p>
+
+<form>
+    <p>
+        Search: <input type="text" name="SearchString">
+        <input type="submit" value="Filter" />
+    </p>
+</form>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.ActionLink("Handle", "PlayersByGame", new { sortOrder = ViewBag.NameSortParm })
+        </th>
+        <th>
+            First Name
+        </th>
+        <th>
+            Last Name
+        </th>
+        <th>
+            DOB
+        </th>
+        <th>
+            Game Name
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Winner)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DOB)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.GameName)
+            </td>
+        </tr>
+    }
+
+</table>
+<br />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("PlayersByGame",
+    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+
+<br />
+@Html.ActionLink("Players By Wins", "Index", new { })
+

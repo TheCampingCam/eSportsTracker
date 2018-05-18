@@ -1,4 +1,4 @@
-﻿@model PagedList.IPagedList<eSportsTracker.Models.Player>
+﻿@model PagedList.IPagedList<eSportsTracker.Models.PlayerWithWin>
 @using PagedList.Mvc;
 <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 
@@ -41,7 +41,12 @@
         <th>
             Last Name
         </th>
-        <th></th>
+        <th>
+            @Html.ActionLink("Wins", "Index", new { sortOrder = "wins" })
+        </th>
+        <th>
+            Games Played
+        </th>
     </tr>
 
     @foreach (var item in Model)
@@ -66,6 +71,12 @@
                 @Html.DisplayFor(modelItem => item.LName)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.Wins)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.GamesPlayed)
+            </td>
+            <td>
                 @{
                     if (Session["LoggedIn"] != null)
                     {
@@ -85,3 +96,6 @@ Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.Page
 
 @Html.PagedListPager(Model, page => Url.Action("Index",
     new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+
+<br />
+@Html.ActionLink("Players By Game", "PlayersByGame", new { })
