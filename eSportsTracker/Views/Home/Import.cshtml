@@ -1,0 +1,15 @@
+﻿@{
+    ViewBag.Title = "Import";
+}
+
+<h2>
+    Import Data
+</h2>
+File must be .xls
+<br />
+@using (Html.BeginForm("Import", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <input type="file" name="file" />
+    <br />
+    <input type="submit" value="OK" />
+}  

@@ -61,8 +61,11 @@
                 else
                 {
                 @Html.ActionLink("Create Admin", "Create", "Users")
+                <br />
                 <div style="float:right">@Html.ActionLink("Log Out", "LogOut", "Users")</div>
                 }
+                <br />
+                @Html.ActionLink("Import Data", "Import", "Home")
             }
         </footer>
     </div>
