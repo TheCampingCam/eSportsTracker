@@ -46,6 +46,7 @@
         <EntityTypeShape EntityType="EsportsTrackerModel.MultiMatchMaker" Width="1.5" PointX="10.375" PointY="0.75" />
         <EntityTypeShape EntityType="EsportsTrackerModel.statTable" Width="1.5" PointX="10.375" PointY="3.75" />
         <EntityTypeShape EntityType="EsportsTrackerModel.PlayerWithWin" Width="2.375" PointX="9.625" PointY="6.5" />
+        <EntityTypeShape EntityType="EsportsTrackerModel.PlayersInGame" Width="1.5" PointX="10.375" PointY="9.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

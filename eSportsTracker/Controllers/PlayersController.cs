@@ -58,6 +58,46 @@ namespace eSportsTracker.Controllers
             return View(players.ToPagedList(pageNumber, pageSize));
         }
 
+        public ActionResult PlayersByGame(string currentFilter, string searchString, string sortOrder, int? page)
+        {
+            ViewBag.CurrentSort = sortOrder;
+            ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewBag.CurrentFilter = searchString;
+
+            var players = (from m in db.PlayersInGames
+                          select m).Distinct();
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                players = players.Where(s => s.Winner.Contains(searchString) || s.FName.Contains(searchString) || s.LName.Contains(searchString) || s.GameName.Contains(searchString));
+            }
+
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    players = players.OrderByDescending(s => s.Winner);
+                    break;
+                default:
+                    players = players.OrderBy(s => s.Winner);
+                    break;
+            }
+
+
+            int pageSize = 10;
+            int pageNumber = (page ?? 1);
+            return View(players.ToPagedList(pageNumber, pageSize));
+        }
+
         // GET: Players/Details/5
         public ActionResult Details(int? id)
         {
