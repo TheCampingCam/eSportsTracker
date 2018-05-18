@@ -34,7 +34,7 @@ namespace eSportsTracker.Controllers
 
             ViewBag.CurrentFilter = searchString;
 
-            var players = from m in db.Players
+            var players = from m in db.PlayerWithWins
                           select m;
 
             if (!String.IsNullOrEmpty(searchString))

@@ -224,6 +224,21 @@ warning 6002: The table/view 'EsportsTracker.dbo.MultiMatchMaker' does not have 
           <Property Name="GameID" Type="int" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
+warning 6002: The table/view 'EsportsTracker.dbo.PlayerWithWins' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="PlayerWithWins">
+          <Key>
+            <PropertyRef Name="Handle" />
+            <PropertyRef Name="PlayerID" />
+          </Key>
+          <Property Name="Handle" Type="varchar" MaxLength="32" Nullable="false" />
+          <Property Name="DOB" Type="date" />
+          <Property Name="LName" Type="varchar" MaxLength="32" />
+          <Property Name="FName" Type="varchar" MaxLength="32" />
+          <Property Name="PlayerID" Type="int" Nullable="false" />
+          <Property Name="Wins" Type="int" />
+          <Property Name="GamesPlayed" Type="int" />
+        </EntityType>
+        <!--Errors Found During Generation:
 warning 6002: The table/view 'EsportsTracker.dbo.statTable' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="statTable">
           <Key>
@@ -634,7 +649,7 @@ warning 6002: The table/view 'EsportsTracker.dbo.TournamentDetailsExtended' does
               <RowType>
                 <Property Name="Player" Type="varchar" MaxLength="32" Nullable="false" />
                 <Property Name="Name" Type="varchar" MaxLength="20" />
-                <Property Name="ValueOf" Type="nvarchar" MaxLength="32" />
+                <Property Name="ValueOf" Type="nvarchar" MaxLength="32" Nullable="false" />
               </RowType>
             </CollectionType>
           </ReturnType>
@@ -707,6 +722,17 @@ warning 6002: The table/view 'EsportsTracker.dbo.TournamentDetailsExtended' does
     [MultiMatchMaker].[Loser] AS [Loser], 
     [MultiMatchMaker].[GameID] AS [GameID]
     FROM [dbo].[MultiMatchMaker] AS [MultiMatchMaker]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="PlayerWithWins" EntityType="Self.PlayerWithWins" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [PlayerWithWins].[Handle] AS [Handle], 
+    [PlayerWithWins].[DOB] AS [DOB], 
+    [PlayerWithWins].[LName] AS [LName], 
+    [PlayerWithWins].[FName] AS [FName], 
+    [PlayerWithWins].[PlayerID] AS [PlayerID], 
+    [PlayerWithWins].[Wins] AS [Wins], 
+    [PlayerWithWins].[GamesPlayed] AS [GamesPlayed]
+    FROM [dbo].[PlayerWithWins] AS [PlayerWithWins]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="statTable" EntityType="Self.statTable" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -1325,8 +1351,9 @@ warning 6002: The table/view 'EsportsTracker.dbo.TournamentDetailsExtended' does
           <Parameter Name="matchID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="getStatsPair" IsComposable="true" ReturnType="Collection(EsportsTrackerModel.getStatsPair_Result)">
-            <Parameter Name="matchID" Mode="In" Type="Int32" />
+          <Parameter Name="matchID" Mode="In" Type="Int32" />
           </FunctionImport>
+          <EntitySet Name="PlayerWithWins" EntityType="EsportsTrackerModel.PlayerWithWin" />
         </EntityContainer>
         <EntityType Name="MatchesView">
           <Key>
@@ -1454,6 +1481,19 @@ warning 6002: The table/view 'EsportsTracker.dbo.TournamentDetailsExtended' does
           <Property Type="String" Name="Name" Nullable="true" MaxLength="20" />
           <Property Type="String" Name="ValueOf" Nullable="true" MaxLength="32" />
         </ComplexType>
+        <EntityType Name="PlayerWithWin">
+          <Key>
+            <PropertyRef Name="Handle" />
+            <PropertyRef Name="PlayerID" />
+          </Key>
+          <Property Name="Handle" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="false" />
+          <Property Name="DOB" Type="DateTime" Precision="0" />
+          <Property Name="LName" Type="String" MaxLength="32" FixedLength="false" Unicode="false" />
+          <Property Name="FName" Type="String" MaxLength="32" FixedLength="false" Unicode="false" />
+          <Property Name="PlayerID" Type="Int32" Nullable="false" />
+          <Property Name="Wins" Type="Int32" />
+          <Property Name="GamesPlayed" Type="Int32" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1735,6 +1775,19 @@ warning 6002: The table/view 'EsportsTracker.dbo.TournamentDetailsExtended' does
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <EntitySetMapping Name="PlayerWithWins">
+            <EntityTypeMapping TypeName="EsportsTrackerModel.PlayerWithWin">
+              <MappingFragment StoreEntitySet="PlayerWithWins">
+                <ScalarProperty Name="GamesPlayed" ColumnName="GamesPlayed" />
+                <ScalarProperty Name="Wins" ColumnName="Wins" />
+                <ScalarProperty Name="PlayerID" ColumnName="PlayerID" />
+                <ScalarProperty Name="FName" ColumnName="FName" />
+                <ScalarProperty Name="LName" ColumnName="LName" />
+                <ScalarProperty Name="DOB" ColumnName="DOB" />
+                <ScalarProperty Name="Handle" ColumnName="Handle" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
