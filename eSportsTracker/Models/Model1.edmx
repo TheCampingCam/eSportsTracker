@@ -265,6 +265,20 @@ warning 6002: The table/view 'EsportsTracker.dbo.statTable' does not have a prim
           <Property Name="ValueOf" Type="nvarchar" MaxLength="32" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
+warning 6002: The table/view 'EsportsTracker.dbo.TeamsWithWins' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="TeamsWithWins">
+          <Key>
+            <PropertyRef Name="TeamName" />
+            <PropertyRef Name="NumPlayers" />
+            <PropertyRef Name="TeamID" />
+          </Key>
+          <Property Name="TeamName" Type="varchar" MaxLength="32" Nullable="false" />
+          <Property Name="NumPlayers" Type="int" Nullable="false" />
+          <Property Name="TeamID" Type="int" Nullable="false" />
+          <Property Name="Wins" Type="int" />
+          <Property Name="GamesPlayed" Type="int" />
+        </EntityType>
+        <!--Errors Found During Generation:
 warning 6002: The table/view 'EsportsTracker.dbo.TournamentDetails' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="TournamentDetails">
           <Key>
@@ -763,6 +777,15 @@ warning 6002: The table/view 'EsportsTracker.dbo.TournamentDetailsExtended' does
     [statTable].[Name] AS [Name], 
     [statTable].[ValueOf] AS [ValueOf]
     FROM [dbo].[statTable] AS [statTable]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="TeamsWithWins" EntityType="Self.TeamsWithWins" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [TeamsWithWins].[TeamName] AS [TeamName], 
+    [TeamsWithWins].[NumPlayers] AS [NumPlayers], 
+    [TeamsWithWins].[TeamID] AS [TeamID], 
+    [TeamsWithWins].[Wins] AS [Wins], 
+    [TeamsWithWins].[GamesPlayed] AS [GamesPlayed]
+    FROM [dbo].[TeamsWithWins] AS [TeamsWithWins]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="TournamentDetails" EntityType="Self.TournamentDetails" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -1377,6 +1400,7 @@ warning 6002: The table/view 'EsportsTracker.dbo.TournamentDetailsExtended' does
           </FunctionImport>
           <EntitySet Name="PlayerWithWins" EntityType="EsportsTrackerModel.PlayerWithWin" />
           <EntitySet Name="PlayersInGames" EntityType="EsportsTrackerModel.PlayersInGame" />
+          <EntitySet Name="TeamsWithWins" EntityType="EsportsTrackerModel.TeamsWithWin" />
         </EntityContainer>
         <EntityType Name="MatchesView">
           <Key>
@@ -1527,6 +1551,18 @@ warning 6002: The table/view 'EsportsTracker.dbo.TournamentDetailsExtended' does
           <Property Name="LName" Type="String" MaxLength="32" FixedLength="false" Unicode="false" />
           <Property Name="DOB" Type="DateTime" Precision="0" />
           <Property Name="GameName" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="TeamsWithWin">
+          <Key>
+            <PropertyRef Name="TeamName" />
+            <PropertyRef Name="NumPlayers" />
+            <PropertyRef Name="TeamID" />
+          </Key>
+          <Property Name="TeamName" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="false" />
+          <Property Name="NumPlayers" Type="Int32" Nullable="false" />
+          <Property Name="TeamID" Type="Int32" Nullable="false" />
+          <Property Name="Wins" Type="Int32" />
+          <Property Name="GamesPlayed" Type="Int32" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -1830,6 +1866,17 @@ warning 6002: The table/view 'EsportsTracker.dbo.TournamentDetailsExtended' does
                 <ScalarProperty Name="LName" ColumnName="LName" />
                 <ScalarProperty Name="FName" ColumnName="FName" />
                 <ScalarProperty Name="Winner" ColumnName="Winner" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TeamsWithWins">
+            <EntityTypeMapping TypeName="EsportsTrackerModel.TeamsWithWin">
+              <MappingFragment StoreEntitySet="TeamsWithWins">
+                <ScalarProperty Name="GamesPlayed" ColumnName="GamesPlayed" />
+                <ScalarProperty Name="Wins" ColumnName="Wins" />
+                <ScalarProperty Name="TeamID" ColumnName="TeamID" />
+                <ScalarProperty Name="NumPlayers" ColumnName="NumPlayers" />
+                <ScalarProperty Name="TeamName" ColumnName="TeamName" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
